@@ -96,28 +96,69 @@ _(Duration: 60,75,120 minutes)_
 
 =====
 
-#### Examples
+#### Examples: 120-Minute Talk
 
 1.  Chat server (w/ clients)   ... Client/Server
-    *   Server:  ???
-    *   Client:  ???
+    *   Server:  tcl (fallback: Python)
+    *   Client:  tcl (fallback: Python)
 *   Stock ticker (w/ clients)  ... Data distribution
-    *   Ticker:  ???
-    *   Client:  ???
+    *   Ticker:  Rust (fallback: C)
+    *   Reader:  Rust (fallback: C)
 *   "Big Data" calculation     ... Workflow
-    *   Venter:  ???
-    *   Worker:  ???
-    *   Joiner:  ???
+    *   Joiner:  VB
+    *   Venter:  C#
+    *   Worker:  C 
 *   Query interpreter          ... Combining MEPs (Client/Server, Data distirbution)
-    *   Facade:  ???
-    *   Engine:  ???
+    *   Facade:  Racket (fallback: F#)
+    *   Engine:  Racket (fallback: F#)
 *   Trading desk               ... Multi-threading (+ examples 1-4)
-    *   GUI/UX:  ???
-    *   Server:  ???
-    *   Ticker:  ???
-    *   Worker:  ???
-    *   Facade:  ???
-    *   Engine:  ???
+    *   GUI/UX:  ? WPF + F#
+                 ? web + F# 
+    *   Client:  F#
+    *   Server:  from Example #1
+    *   Reader:  F#
+    *   Ticker:  from Example #2
+    *   Joiner:  F#
+    *   Venter:  F#
+    *   Worker:  from Example #3
+    *   Facade:  F#
+    *   Engine:  from Example #4
+
+#### Examples: 75-Minute Talk
+
+1.  Chat server (w/ clients)   ... Client/Server
+    *   Server:  tcl (fallback: Python)
+    *   Client:  tcl (fallback: Python)
+*   Stock ticker (w/ clients)  ... Data distribution
+    *   Ticker:  Rust (fallback: C)
+    *   Reader:  Rust (fallback: C)
+*   "Big Data" calculation     ... Workflow
+    *   Joiner:  VB
+    *   Venter:  C#
+    *   Worker:  C 
+*   Trading desk               ... Multi-threading (+ examples 1-4)
+    *   GUI/UX:  ? WPF + F#
+                 ? web + F# 
+    *   Client:  F#
+    *   Server:  from Example #1
+    *   Reader:  F#
+    *   Ticker:  from Example #2
+    *   Joiner:  F#
+    *   Venter:  F#
+    *   Worker:  from Example #3
+
+#### Examples: 60-Minute Talk
+
+1.  Chat server (w/ clients)   ... Client/Server
+    *   Server:  F#
+    *   Client:  F#
+*   Stock ticker (w/ clients)  ... Data distribution
+    *   Ticker:  F#
+    *   Reader:  F#
+*   "Big Data" calculation     ... Workflow
+    *   Joiner:  VB
+    *   Venter:  C#
+    *   Worker:  C 
 
 =====
 
@@ -196,3 +237,36 @@ _(Duration: 60,75,120 minutes)_
     * PLAIN - username/password over plaintext, useful for internal networks or with transport-level encryption (eg: VPN)
     * CURVE - CurveCP handshake, adapted for TCP (eliptic curve crypto + perfect-forward secrecy)
   * Pluggable authenticators (INPROC nodes) via well-defined protocol
+
+=====
+
+#### Solution
+
+* BeyondTheBox.sln
+  + docs
+    + content
+    + tools
+      - generate.fsx
+      - template.cshtml
+  + project
+    - build.fsx
+    - README.md
+    - RELEASE_NOTES.md
+  + 1_Chat
+    * ???
+  + 2_Tick
+    * ???
+  + 3_Calc
+    * BeyondTheBox.Calc.Joiner.vbproj
+    * BeyondTheBox.Calc.Venter.csporj
+    * BeyondTheBox.Calc.Worker.cpproj
+  + 4_Eval
+    * ???
+  + 5_Quix
+    * BeyondTheBox.Quixotic.fsproj
+  - 1_Chat.ps
+  - 2_Tick.ps
+  - 3_Calc.ps
+  - 4_Eval.ps
+  - 5_Quix.ps
+  - Index.lnk
