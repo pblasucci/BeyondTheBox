@@ -20,15 +20,15 @@ _(Duration: 60,75,120 minutes)_
 *   Example 2
 *   ZeroMQ in detail
     1.  ???
-    *   ??? 
+    *   ???
 *   Example 3
 *   Things we didn't cover
     1.  ???
-    *   ??? 
+    *   ???
 *   Conclusion
     1.  Question & Answer
     *   Links about ZeroMQ
-    *   Links about the presenter    
+    *   Links about the presenter
 
 =====
 
@@ -46,7 +46,7 @@ _(Duration: 60,75,120 minutes)_
 *   Example 2
 *   ZeroMQ in detail
     1.  ???
-    *   ??? 
+    *   ???
 *   Example 3
 *   More important concepts
     1.  ???
@@ -54,11 +54,11 @@ _(Duration: 60,75,120 minutes)_
 *   Example 4
 *   Things we didn't cover
     1.  ???
-    *   ??? 
+    *   ???
 *   Conclusion
     1.  Question & Answer
     *   Links about ZeroMQ
-    *   Links about the presenter    
+    *   Links about the presenter
 
 =====
 
@@ -76,7 +76,7 @@ _(Duration: 60,75,120 minutes)_
 *   Example 2
 *   ZeroMQ in detail
     1.  ???
-    *   ??? 
+    *   ???
 *   Example 3
 *   More important concepts
     1.  ???
@@ -88,77 +88,46 @@ _(Duration: 60,75,120 minutes)_
 *   Example 5
 *   Things we didn't cover
     1.  ???
-    *   ??? 
+    *   ???
 *   Conclusion
     1.  Question & Answer
     *   Links about ZeroMQ
-    *   Links about the presenter    
+    *   Links about the presenter
 
 =====
 
 #### Examples: 120-Minute Talk
 
-1.  Chat server (w/ clients)   ... Client/Server
-    *   Server:  tcl (fallback: Python)
-    *   Client:  tcl (fallback: Python)
-*   Stock ticker (w/ clients)  ... Data distribution
-    *   Ticker:  Rust (fallback: C)
-    *   Reader:  Rust (fallback: C)
-*   "Big Data" calculation     ... Workflow
-    *   Joiner:  VB
-    *   Venter:  C#
-    *   Worker:  C 
-*   Query interpreter          ... Combining MEPs (Client/Server, Data distirbution)
-    *   Facade:  Racket (fallback: F#)
-    *   Engine:  Racket (fallback: F#)
-*   Trading desk               ... Multi-threading (+ examples 1-4)
-    *   GUI/UX:  ? WPF + F#
-                 ? web + F# 
-    *   Client:  F#
-    *   Server:  from Example #1
-    *   Reader:  F#
-    *   Ticker:  from Example #2
-    *   Joiner:  F#
-    *   Venter:  F#
-    *   Worker:  from Example #3
-    *   Facade:  F#
-    *   Engine:  from Example #4
+1.  Chat app                ... Client/Server
+*   Stock ticker            ... Data distribution
+*   "Big Data" calculation  ... Workflow
+*   Query engine            ... Combining MEPs (Client/Server, Data distirbution)
+*   Trading desk            ... Multi-threading (+ examples 1-4)
 
 #### Examples: 75-Minute Talk
 
-1.  Chat server (w/ clients)   ... Client/Server
-    *   Server:  tcl (fallback: Python)
-    *   Client:  tcl (fallback: Python)
-*   Stock ticker (w/ clients)  ... Data distribution
-    *   Ticker:  Rust (fallback: C)
-    *   Reader:  Rust (fallback: C)
-*   "Big Data" calculation     ... Workflow
-    *   Joiner:  VB
-    *   Venter:  C#
-    *   Worker:  C 
-*   Trading desk               ... Multi-threading (+ examples 1-4)
-    *   GUI/UX:  ? WPF + F#
-                 ? web + F# 
-    *   Client:  F#
-    *   Server:  from Example #1
-    *   Reader:  F#
-    *   Ticker:  from Example #2
-    *   Joiner:  F#
-    *   Venter:  F#
-    *   Worker:  from Example #3
+1.  Chat app                ... Client/Server
+*   Stock ticker            ... Data distribution
+*   "Big Data" calculation  ... Workflow
+*   Trading desk            ... Multi-threading (+ examples 1-4)
 
 #### Examples: 60-Minute Talk
 
-1.  Chat server (w/ clients)   ... Client/Server
-    *   Server:  F#
-    *   Client:  F#
-*   Stock ticker (w/ clients)  ... Data distribution
-    *   Ticker:  F#
-    *   Reader:  F#
-*   "Big Data" calculation     ... Workflow
-    *   Joiner:  VB
-    *   Venter:  C#
-    *   Worker:  C 
+1.  Chat app                ... Client/Server
+*   Stock ticker            ... Data distribution
+*   "Big Data" calculation  ... Workflow
+
+#### Example languages
+
+1.  F#
+*   C#
+*   VB
+*   C
+*   Rust
+*   ? Python
+*   ? TCL
+*   ? Delphi
+*   ? Nimrod
 
 =====
 
@@ -173,9 +142,9 @@ _(Duration: 60,75,120 minutes)_
 1. Build in layers
   * Wire protocol sits just above transport protocol (ZMTP)
   * Socket behavior sits just above wire protocol (libzmq)
-  * App code sits just above socket behavior 
+  * App code sits just above socket behavior
 * Transport Unification
-  * Unicast 
+  * Unicast
     * TCP
     * IPC (not available on Windows)
     * INPROC
@@ -212,7 +181,7 @@ _(Duration: 60,75,120 minutes)_
     * DEALER -- interleaved send/recv, app must do tracking)
     * ROUTER -- interleaved recv/send, app must do tracking)
     * PUSH -- send messages downstream
-    * PULL -- recv upstream messages 
+    * PULL -- recv upstream messages
     * PUB -- send topical data
     * SUB -- recv topical data, filtered by topic
     * XPUB -- like PUB, but subscription info is shared
@@ -227,7 +196,7 @@ _(Duration: 60,75,120 minutes)_
 * Proxy
   * In-the-box abstraction for shuttling messages between sockets
   * Also called: device, streamer, queue, forwarder
-  * Not useful for custom routing logic  
+  * Not useful for custom routing logic
 * Security
   * Available from ZMTP v3
   * SASL conformant
@@ -239,34 +208,3 @@ _(Duration: 60,75,120 minutes)_
   * Pluggable authenticators (INPROC nodes) via well-defined protocol
 
 =====
-
-#### Solution
-
-* BeyondTheBox.sln
-  + docs
-    + content
-    + tools
-      - generate.fsx
-      - template.cshtml
-  + project
-    - build.fsx
-    - README.md
-    - RELEASE_NOTES.md
-  + 1_Chat
-    * ???
-  + 2_Tick
-    * ???
-  + 3_Calc
-    * BeyondTheBox.Calc.Joiner.vbproj
-    * BeyondTheBox.Calc.Venter.csporj
-    * BeyondTheBox.Calc.Worker.cpproj
-  + 4_Eval
-    * ???
-  + 5_Quix
-    * BeyondTheBox.Quixotic.fsproj
-  - 1_Chat.ps
-  - 2_Tick.ps
-  - 3_Calc.ps
-  - 4_Eval.ps
-  - 5_Quix.ps
-  - Index.lnk
