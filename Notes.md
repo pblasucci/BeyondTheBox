@@ -2,11 +2,9 @@
 
 As fast and powerful as the PC has become, it's still not enough. Modern computing demands moving code up and out -- from threads to processes to machines to clusters. To do so intelligently requires solid tools and flexible techniques. In this example-driven talk, you'll learn how ZeroMQ, a library for distributed computing, provides the means to rise up to the challenges of modern computing. In particular, we will explore how a language-agnostic, pattern-based approach to message exchange may be used to deliver sophisticated and compelling distributed programming solutions.
 
-_(Duration: 60,75,120 minutes)_
-
 =====
 
-#### Outline: 120-minute Talk
+#### Outline
 
 1.  Introduction
     1.  About the presenter
@@ -24,11 +22,10 @@ _(Duration: 60,75,120 minutes)_
             *   Vibrant community
             *   4 languge "ports"
             *   45+ language bindings
-*   Example: Stock ticker
 *   Basic ZeroMQ Concepts
     1.  Sockets passing (sending/receiving) messages
         1.  Sends or Receives messages according to socket type
-        *   Connects or Binds to and endpoint according to topology
+        *   Connects or Binds to an endpoint according to topology
         *   No shared state
         *   Binary data (0 or more bytes) -- app provides meaning
     *   Transport Unification
@@ -37,7 +34,9 @@ _(Duration: 60,75,120 minutes)_
             1.  TCP
             *   IPC -- doesn't work on Windows!
             *   InProc (actor-based multi-threading)
-*   Example: "Big Data" calculation
+    *   One node (i.e. process, context, et cetera) can have many sockets
+        *   Combining sockets helps seperate concerns
+        *   Combining sockets improves overall flexibility
 *   ZeroMQ in detail
     1.  Message-exchange patterns
         1.  Determined by connecting certain Socket "roles"
@@ -58,8 +57,14 @@ _(Duration: 60,75,120 minutes)_
         *   PULL  -- recv upstream messages
         *   PUB   -- send topical data
         *   SUB   -- recv topical data, filtered by topic
-*   Example: Chat server
-    1.  Multi-part messages
+*   More important concepts
+    1.  Context
+        1.  Heavywieght (thread-safe)
+            1. Sockets are lightweight (NOT thread-safe)
+        *   "Owns" Sockets
+        *   IS TRANSPORT for INPROC channels
+        *   Mulitple contexts in one process is like mulitple processes
+    *   Multi-part messages
         1.  Framing for structure (1 or more frames)
         *   Must fit in memory
         *   Guarenteed to be delivered whole or not at all
@@ -69,14 +74,7 @@ _(Duration: 60,75,120 minutes)_
         *   XPUB -- like PUB, but subscription info is shared
         *   XSUB -- like XSUB, but subscription info is shared
         *   PAIR -- exclusive channel between two INPROC nodes
-*   Example: Query engine
-*   More important concepts
-    1.  Context
-        1.  Heavywieght (thread-safe)
-            1. Sockets are lightweigh (NOT thread-safe)
-        *   "Owns" Sockets
-        *   IS TRANSPORT for INPROC channels
-        *   Mulitple contexts in one process is like mulitple processes
+*   Useful tooling
     *   Proxy
         1.  In-the-box abstraction for shuttling messages between sockets
         *   Also called: device, streamer, queue, forwarder
@@ -84,170 +82,8 @@ _(Duration: 60,75,120 minutes)_
     *   Diagnostics
         1.  Exposed at the Socket-level
         *   Stream of events delivered via PAIR socket
-*   Example: Trading Desk
 *   Things we didn't cover
     1.  Multicast protocols
-    *   Security framework
-    *   Non-ZMQ peers
-*   Conclusion
-    1.  Question & Answer
-    *   Links about ZeroMQ
-    *   Links about the presenter
-
-#### Outline: 75-minute Talk
-
-1.  Introduction
-    1.  About the presenter
-    *   About ZeroMQ
-        1.  ZeroMQ is NOT middleware (i.e. it's not a message queue)
-        *   ZeroMQ can be used anytime logic needs to be split (threads, processes, machines, networks)
-        *   "Sockets" aren't really like actual (network) sockets... even if they seem familiar
-        *   Build in layers
-            1.  Wire protocol sits just above transport protocol (ZMTP)
-            *   Socket behavior sits just above wire protocol (libzmq)
-            *   App code sits just above socket behavior
-        *   Communication and community
-            1.  FOSS
-            *   Well-defined protocols
-            *   Vibrant community
-            *   4 languge "ports"
-            *   45+ language bindings
-*   Example: Stock ticker
-*   Basic ZeroMQ Concepts
-    1.  Sockets passing (sending/receiving) messages
-        1.  Sends or Receives messages according to socket type
-        *   Connects or Binds to and endpoint according to topology
-        *   No shared state
-        *   Binary data (0 or more bytes) -- app provides meaning
-    *   Transport Unification
-        1.  Change transport by changing address (string)
-        *   Popular transports include
-            1.  TCP
-            *   IPC -- doesn't work on Windows!
-            *   InProc (actor-based multi-threading)
-    *   Context
-        1.  Heavywieght (thread-safe)
-            1. Sockets are lightweigh (NOT thread-safe)
-        *   "Owns" Sockets
-        *   IS TRANSPORT for INPROC channels
-        *   Mulitple contexts in one process is like mulitple processes
-*   Example: "Big Data" calculation
-*   ZeroMQ in detail
-    1.  Message-exchange patterns
-        1.  Determined by connecting certain Socket "roles"
-        *   Client/Server
-        *   Remote procedure call
-        *   Workflow (parallel, repeat, et cetera)
-        *   Data distribution
-    *   Socket role
-        1.  Determines message-exchange behavior
-        *   send/recv pattern
-        *   routing strategy
-        *   compatible peers
-        *   "mute state" action
-    *   Basic socket roles
-        1.  REQ   -- strictly synchronous send/recv, zmq handles tracking
-        *   REP   -- strictly synchronous recv/send, zmq handles tracking
-        *   PUSH  -- send messages downstream
-        *   PULL  -- recv upstream messages
-        *   PUB   -- send topical data
-        *   SUB   -- recv topical data, filtered by topic
-*   Example: Chat server
-    1.  Multi-part messages
-        1.  Framing for structure (1 or more frames)
-        *   Must fit in memory
-        *   Guarenteed to be delivered whole or not at all
-    *   Advanced socket roles
-        1.  DEALER -- interleaved send/recv, app must do tracking)
-        *   ROUTER -- interleaved recv/send, app must do tracking)
-        *   XPUB -- like PUB, but subscription info is shared
-        *   XSUB -- like XSUB, but subscription info is shared
-        *   PAIR -- exclusive channel between two INPROC nodes
-*   Example: Trading desk
-*   Things we didn't cover
-    1.  Multicast protocols
-    *   Proxies
-    *   Diagnostics
-    *   Security framework
-    *   Non-ZMQ peers
-*   Conclusion
-    1.  Question & Answer
-    *   Links about ZeroMQ
-    *   Links about the presenter
-
-#### Outline: 60-minute Talk
-
-1.  Introduction
-    1.  About the presenter
-    *   About ZeroMQ
-        1.  ZeroMQ is NOT middleware (i.e. it's not a message queue)
-        *   ZeroMQ can be used anytime logic needs to be split (threads, processes, machines, networks)
-        *   "Sockets" aren't really like actual (network) sockets... even if they seem familiar
-        *   Build in layers
-            1.  Wire protocol sits just above transport protocol (ZMTP)
-            *   Socket behavior sits just above wire protocol (libzmq)
-            *   App code sits just above socket behavior
-        *   Communication and community
-            1.  FOSS
-            *   Well-defined protocols
-            *   Vibrant community
-            *   4 languge "ports"
-            *   45+ language bindings
-*   Basic ZeroMQ Concepts
-    1.  Sockets passing (sending/receiving) messages
-        1.  Sends or Receives messages according to socket type
-        *   Connects or Binds to and endpoint according to topology
-        *   No shared state
-        *   Binary data (0 or more bytes) -- app provides meaning
-    *   Transport Unification
-        1.  Change transport by changing address (string)
-        *   Popular transports include
-            1.  TCP
-            *   IPC -- doesn't work on Windows!
-            *   InProc (actor-based multi-threading)
-    *   Context
-        1.  Heavywieght (thread-safe)
-            1. Sockets are lightweigh (NOT thread-safe)
-        *   "Owns" Sockets
-        *   IS TRANSPORT for INPROC channels
-        *   Mulitple contexts in one process is like mulitple processes
-*   Example: Stock ticker
-*   ZeroMQ in detail
-    1.  Message-exchange patterns
-        1.  Determined by connecting certain Socket "roles"
-        *   Client/Server
-        *   Remote procedure call
-        *   Workflow (parallel, repeat, et cetera)
-        *   Data distribution
-    *   Socket role
-        1.  Determines message-exchange behavior
-        *   send/recv pattern
-        *   routing strategy
-        *   compatible peers
-        *   "mute state" action
-    *   Basic socket roles
-        1.  REQ   -- strictly synchronous send/recv, zmq handles tracking
-        *   REP   -- strictly synchronous recv/send, zmq handles tracking
-        *   PUSH  -- send messages downstream
-        *   PULL  -- recv upstream messages
-        *   PUB   -- send topical data
-        *   SUB   -- recv topical data, filtered by topic
-*   Example: "Big Data" Calculation
-    1.  Multi-part messages
-        1.  Framing for structure (1 or more frames)
-        *   Must fit in memory
-        *   Guarenteed to be delivered whole or not at all
-    *   Advanced socket roles
-        1.  DEALER -- interleaved send/recv, app must do tracking)
-        *   ROUTER -- interleaved recv/send, app must do tracking)
-        *   XPUB -- like PUB, but subscription info is shared
-        *   XSUB -- like XSUB, but subscription info is shared
-        *   PAIR -- exclusive channel between two INPROC nodes
-*   Example: Chat server
-*   Things we didn't cover
-    1.  Multicast protocols
-    *   Proxies
-    *   Diagnostics
     *   Security framework
     *   Non-ZMQ peers
 *   Conclusion
@@ -257,30 +93,49 @@ _(Duration: 60,75,120 minutes)_
 
 =====
 
-#### Examples: 120-Minute Talk
+#### Examples
 
-1.  Stock ticker            ... Data distribution
-*   "Big Data" calculation  ... Workflow
-*   Chat app                ... Client/Server
-*   Query engine            ... Combining MEPs (Client/Server, Data distirbution)
-*   Trading desk            ... Multi-threading (+ examples 1-4)
-
-#### Examples: 75-Minute Talk
-
-1.  Stock ticker            ... Data distribution
-*   "Big Data" calculation  ... Workflow
-*   Chat app                ... Client/Server
-*   Trading desk            ... Multi-threading (+ examples 1-4)
-
-#### Examples: 60-Minute Talk
-
-1.  Stock ticker            ... Data distribution
-*   "Big Data" calculation  ... Workflow
-*   Chat app                ... Client/Server
-
-#### Example languages
-
-*   ???
+1.    Group chat
+      1.    Server
+            1.    Forwards incoming to whole group
+            *     Sockets: REP
+            *     Languages: ???
+      *     Client
+            1.    Sends messages to server
+            *     Displays replies from server
+            *     Sockets: REQ
+            *     Languages: ???
+*     "Big Data" calculation
+      1.    Ventillator
+            1.    Dispenses tasks to workers
+            *     Sockets: PUSH
+            *     Languages: ???
+      *     Worker
+            1.    Performs work based on message received from ventillator
+            *     Sends results of work to collector
+            *     Sockets: PUSH, PULL
+            *     Languages: ???
+      *     Collector
+            1.    Aggregates results from workers
+            *     Sockets: PULL
+            *     Languages: ???
+*     Stock ticker
+      1.    Source
+            1.    Broadcasts stock data
+            *     Sockets: PUB
+            *     Languages: ???
+      *     Reader
+            1.    Consumes data broadcast from ticker
+            *     Sockets: SUB
+            *     Languages: ???
+      *     Multi-part messages
+            1.    Stock symbol
+            2.    Timestamp
+            3.    Price
+*     Trading desk
+      1.    Multi-threading
+      *     Diagnostics
+      *     Leverages examples 1, 2, and 3
 
 =====
 
@@ -344,7 +199,6 @@ _(Duration: 60,75,120 minutes)_
 * Context
   * Heavywieght (thread-safe)
   * "Owns" Sockets
-
   *  IS TRANSPORT for INPROC channels
   * Mulitple contexts in one process is like mulitple processes
 * Proxy
