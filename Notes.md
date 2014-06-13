@@ -18,13 +18,17 @@ As fast and powerful as the PC has become, it's still not enough. Modern computi
             *   App code sits just above socket behavior
         *   Communication and community
             1.  FOSS
+            *   Designed and built by members of AMQP team
             *   Well-defined protocols
-            *   Vibrant community
-            *   4 languge "ports"
+            *   Vibrant community (ZeroMQ GitHub org: 374 unique contributors - 12 Jun 2014)
+            *   Written in portable C/C++
+                1.   Native "ports" to Java, C#, Erlang
             *   45+ language bindings
 *   Basic ZeroMQ Concepts
     1.  Sockets passing (sending/receiving) messages
         1.  Sends or Receives messages according to socket type
+        *   Message transmission may be blocking or non-blocking
+            1.  send/recv vs poll
         *   Connects or Binds to an endpoint according to topology
         *   No shared state
         *   Binary data (0 or more bytes) -- app provides meaning
@@ -35,8 +39,9 @@ As fast and powerful as the PC has become, it's still not enough. Modern computi
             *   IPC -- doesn't work on Windows!
             *   InProc (actor-based multi-threading)
     *   One node (i.e. process, context, et cetera) can have many sockets
-        *   Combining sockets helps seperate concerns
+        1.  Combining sockets helps seperate concerns
         *   Combining sockets improves overall flexibility
+    *   Example: Group chat
 *   ZeroMQ in detail
     1.  Message-exchange patterns
         1.  Determined by connecting certain Socket "roles"
@@ -57,6 +62,7 @@ As fast and powerful as the PC has become, it's still not enough. Modern computi
         *   PULL  -- recv upstream messages
         *   PUB   -- send topical data
         *   SUB   -- recv topical data, filtered by topic
+    *   Example: "Big Data" calculation
 *   More important concepts
     1.  Context
         1.  Heavywieght (thread-safe)
@@ -74,6 +80,7 @@ As fast and powerful as the PC has become, it's still not enough. Modern computi
         *   XPUB -- like PUB, but subscription info is shared
         *   XSUB -- like XSUB, but subscription info is shared
         *   PAIR -- exclusive channel between two INPROC nodes
+    *   Example: Stock ticker
 *   Useful tooling
     *   Proxy
         1.  In-the-box abstraction for shuttling messages between sockets
@@ -89,6 +96,7 @@ As fast and powerful as the PC has become, it's still not enough. Modern computi
 *   Conclusion
     1.  Question & Answer
     *   Links about ZeroMQ
+    *   Links about the presentation
     *   Links about the presenter
 
 =====
@@ -97,27 +105,29 @@ As fast and powerful as the PC has become, it's still not enough. Modern computi
 
 1.    Group chat
       1.    Server
-            1.    Forwards incoming to whole group
-            *     Sockets: REP
+            1.    Forwards incoming messages, after applying timestamp, to whole group
+            *     Sockets: ROUTER
             *     Languages: ???
       *     Client
             1.    Sends messages to server
+                  1.  `Message = UTF8 (sprintf "%{client-name}|%{client-message}")`
             *     Displays replies from server
+                  1.  `Message = UTF8 (scanf "%{timestamp}|%{client-name}|%{client-message}")`
             *     Sockets: REQ
             *     Languages: ???
 *     "Big Data" calculation
       1.    Ventillator
             1.    Dispenses tasks to workers
-            *     Sockets: PUSH
+            *     Sockets: PUSH, SUB
             *     Languages: ???
       *     Worker
             1.    Performs work based on message received from ventillator
             *     Sends results of work to collector
-            *     Sockets: PUSH, PULL
+            *     Sockets: PUSH, PULL, SUB
             *     Languages: ???
       *     Collector
             1.    Aggregates results from workers
-            *     Sockets: PULL
+            *     Sockets: PULL, PUB
             *     Languages: ???
 *     Stock ticker
       1.    Source
@@ -133,9 +143,20 @@ As fast and powerful as the PC has become, it's still not enough. Modern computi
             2.    Timestamp
             3.    Price
 *     Trading desk
-      1.    Multi-threading
+      1.    Client
+            1.    GUI aggregating several componets
+                  1.    Group chat client
+                  *     "Big Data" ventillator
+                  *     "Big Data" collector
+                  *     Stock ticker reader
+                  *     Diagnostics from all sockets
+            *     Sockets: DEALER, SUB, PUSH, PULL, PAIR
+            *     Languages: ???
+      *     Multi-threading
+            1.    Main thread updates GUI
+            *     Each "service" client gets a background thread
       *     Diagnostics
-      *     Leverages examples 1, 2, and 3
+            1.    Background thread publishes socket info to log window
 
 =====
 
