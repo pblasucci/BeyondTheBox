@@ -107,37 +107,37 @@ As fast and powerful as the PC has become, it's still not enough. Modern computi
       1.    Server
             1.    Forwards incoming messages, after applying timestamp, to whole group
             *     Sockets: ROUTER
-            *     Languages: ???
+            *     Languages: Rust
       *     Client
             1.    Sends messages to server
                   1.  `Message = UTF8 (sprintf "%{client-name}|%{client-message}")`
             *     Displays replies from server
                   1.  `Message = UTF8 (scanf "%{timestamp}|%{client-name}|%{client-message}")`
             *     Sockets: REQ
-            *     Languages: ???
+            *     Languages: C#
 *     "Big Data" calculation
       1.    Ventillator
             1.    Dispenses tasks to workers
             *     Sockets: PUSH, SUB
-            *     Languages: ???
+            *     Languages: Python
       *     Worker
             1.    Performs work based on message received from ventillator
             *     Sends results of work to collector
             *     Sockets: PUSH, PULL, SUB
-            *     Languages: ???
+            *     Languages: Haskell
       *     Collector
             1.    Aggregates results from workers
             *     Sockets: PULL, PUB
-            *     Languages: ???
+            *     Languages: Python
 *     Stock ticker
       1.    Source
             1.    Broadcasts stock data
             *     Sockets: PUB
-            *     Languages: ???
+            *     Languages: C
       *     Reader
             1.    Consumes data broadcast from ticker
             *     Sockets: SUB
-            *     Languages: ???
+            *     Languages: VB.NET
       *     Multi-part messages
             1.    Stock symbol
             2.    Timestamp
@@ -151,7 +151,7 @@ As fast and powerful as the PC has become, it's still not enough. Modern computi
                   *     Stock ticker reader
                   *     Diagnostics from all sockets
             *     Sockets: DEALER, SUB, PUSH, PULL, PAIR
-            *     Languages: ???
+            *     Languages: F#
       *     Multi-threading
             1.    Main thread updates GUI
             *     Each "service" client gets a background thread
