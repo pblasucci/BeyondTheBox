@@ -2,6 +2,10 @@
 
 As fast and powerful as the PC has become, it's still not enough. Modern computing demands moving code up and out -- from threads to processes to machines to clusters. To do so intelligently requires solid tools and flexible techniques. In this example-driven talk, you'll learn how ZeroMQ, a library for distributed computing, provides the means to rise up to the challenges of modern computing. In particular, we will explore how a language-agnostic, pattern-based approach to message exchange may be used to deliver sophisticated and compelling distributed programming solutions.
 
+_Duration: ~75 minutes_
+
+_Media: slides, code, print_
+
 =====
 
 #### Outline
@@ -41,7 +45,6 @@ As fast and powerful as the PC has become, it's still not enough. Modern computi
     *   One node (i.e. process, context, et cetera) can have many sockets
         1.  Combining sockets helps seperate concerns
         *   Combining sockets improves overall flexibility
-    *   Example: Group chat
 *   ZeroMQ in detail
     1.  Message-exchange patterns
         1.  Determined by connecting certain Socket "roles"
@@ -62,7 +65,6 @@ As fast and powerful as the PC has become, it's still not enough. Modern computi
         *   PULL  -- recv upstream messages
         *   PUB   -- send topical data
         *   SUB   -- recv topical data, filtered by topic
-    *   Example: "Big Data" calculation
 *   More important concepts
     1.  Context
         1.  Heavywieght (thread-safe)
@@ -80,7 +82,6 @@ As fast and powerful as the PC has become, it's still not enough. Modern computi
         *   XPUB -- like PUB, but subscription info is shared
         *   XSUB -- like XSUB, but subscription info is shared
         *   PAIR -- exclusive channel between two INPROC nodes
-    *   Example: Stock ticker
 *   Useful tooling
     *   Proxy
         1.  In-the-box abstraction for shuttling messages between sockets
@@ -103,60 +104,106 @@ As fast and powerful as the PC has become, it's still not enough. Modern computi
 
 #### Examples
 
-1.    Group chat
-      1.    Server
-            1.    Forwards incoming messages, after applying timestamp, to whole group
-            *     Sockets: ROUTER
-            *     Languages: Rust
-      *     Client
-            1.    Sends messages to server
-                  1.  `Message = UTF8 (sprintf "%{client-name}|%{client-message}")`
-            *     Displays replies from server
-                  1.  `Message = UTF8 (scanf "%{timestamp}|%{client-name}|%{client-message}")`
-            *     Sockets: REQ
-            *     Languages: C#
-*     "Big Data" calculation
-      1.    Ventillator
-            1.    Dispenses tasks to workers
-            *     Sockets: PUSH, SUB
-            *     Languages: Python
-      *     Worker
-            1.    Performs work based on message received from ventillator
-            *     Sends results of work to collector
-            *     Sockets: PUSH, PULL, SUB
-            *     Languages: Haskell
-      *     Collector
-            1.    Aggregates results from workers
-            *     Sockets: PULL, PUB
-            *     Languages: Python
-*     Stock ticker
-      1.    Source
-            1.    Broadcasts stock data
-            *     Sockets: PUB
-            *     Languages: C
-      *     Reader
-            1.    Consumes data broadcast from ticker
-            *     Sockets: SUB
-            *     Languages: VB.NET
-      *     Multi-part messages
-            1.    Stock symbol
-            2.    Timestamp
-            3.    Price
-*     Trading desk
-      1.    Client
-            1.    GUI aggregating several componets
-                  1.    Group chat client
-                  *     "Big Data" ventillator
-                  *     "Big Data" collector
-                  *     Stock ticker reader
-                  *     Diagnostics from all sockets
-            *     Sockets: DEALER, SUB, PUSH, PULL, PAIR
-            *     Languages: F#
-      *     Multi-threading
-            1.    Main thread updates GUI
-            *     Each "service" client gets a background thread
-      *     Diagnostics
-            1.    Background thread publishes socket info to log window
+<pre>
+chatz.server (Rust, Console)
+  # keeps track of connected (expiring) users
+  # returns list of connected users
+  ROUTER tcp://*:9001
+    -&gt; [ "(?usr:\w+)(\037(?msg:\w+))?" ]
+    &lt;- [ "(?usr:\w+)" ]+
+  # broadcasts one user's message to entire group
+  PUB tcp://*:9002
+    &lt;&lt; [ "(?usr:\w+)\037(?msg:\w+)" ]
+
+chatz.client (C#, WinForms)
+  # sends messages to server for broadcast
+  REQ tcp://localhost:9001
+  # gets messages broadcast by anyone in the group
+  SUB tcp://localhost:9002
+  ?&gt; [ "" ]
+
+tickz.server (C, Server)
+  # broadcast stock data
+  PUB tcp://*:9003
+  &lt;&lt; [ "(?stock:[A-Z][A-Z0-9]+)" ]
+     [ timestamp :f64            ]
+     [ price     :f64            ]
+
+tickz.client (VB, WinForms)
+  # receive stock data from server
+  SUB tcp://localhost:9003
+  # user adds explicit stock symbols for which to receive data
+  ?&gt; [ "(?stock:[A-Z][A-Z0-9]+)" ]*
+
+valuz.source (Python, Console)
+  # sends batch data to worker(s) for processing
+  PUSH tcp://*:9004
+  &lt;- [ "(?stock:[A-Z][A-Z0-9]+)"        ]
+     [ action :(BUY = 0uy | SELL = 1uy) ]
+     [ shares :i32                      ]
+     [ price  :f64                      ]
+  # receives control signal from reducer
+  SUB tcp://localhost:9006
+  ?&gt; [ command :START = 0uy ]
+
+valuz.reduce (Python, Console)
+  # gets results of individual calculation from worker(s)
+  PULL tcp://*:9005
+  -&gt; [  command :(READY = 2uy)  ]
+  -&gt; [ "(?stock:[A-Z][A-Z0-9]+)" ]
+     [ value :f64                ]
+  # sends control signals to source, worker(s)
+  PUB tcp://*:9006
+  &lt;&lt; [ comand :START = 0uy ] # to source, when worker(s) ready
+  &lt;&lt; [ comand :EXIT  = 0uy ] # to worker(s), after completion
+  # displays aggregate calculation
+
+valuz.worker (Haskell, Console)
+  # get input data from source
+  # performs calculation
+  PULL tcp://localhost:9004
+  # sends "ready" signal to reducer
+  # sends calculated result to reducer
+  PUSH tcp://localhost:9005
+  # receives control signal from reducer
+  SUB  tcp://localhost:9006
+  ?&gt; [ command :EXIT = 1uy ]
+
+dealz (F#, WPF w/ WinForms charting)
+  # chatz, on bg thread
+  REQ tcp://localhost:9001
+  SUB tcp://localhost:9002
+  ?&gt; [ "" ]
+  # tickz, on bg thread
+  SUB tcp://localhost:9003
+  ?&gt; [ "(?sym:[A-Z][A-Z0-9]+)" ]*
+  # valuz, on bg thread
+  PUSH tcp://*:9004
+  &lt;- [ "(?stock:[A-Z][A-Z0-9]+)"        ]
+     [ action :(BUY = 0uy | SELL = 1uy) ]
+     [ shares :i32                      ]
+     [ price  :f64                      ]
+  PULL tcp://*:9005
+  -&gt; [ command :(READY = 2uy) ]
+  -&gt; [ "(?stock:[A-Z][A-Z0-9]+)" ]
+     [ value :f64                ]
+  PUB  tcp://*:9006
+  &lt;&lt; [ comand :EXIT = 0uy ] # to worker, after completion
+  # monitor, on bg thread
+  PAIR inproc://monitor.chatz.req
+  PAIR inproc://monitor.chatz.sub
+  PAIR inproc://monitor.tickz.sub
+  PAIR inproc://monitor.valuz.push
+  PAIR inproc://monitor.valuz.pull
+  PAIR inproc://monitor.valuz.pub
+</pre>
+
+=====
+
+#### Document
+
+__TODO: ???__
+
 
 =====
 

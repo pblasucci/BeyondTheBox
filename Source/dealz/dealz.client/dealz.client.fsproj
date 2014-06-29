@@ -54,21 +54,22 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
-    <Compile Include="ChatzView.xaml.fs" />
-    <Compile Include="TickzView.xaml.fs" />
-    <Compile Include="ValuzView.xaml.fs" />
-    <Compile Include="MainView.xaml.fs" />
-    <Compile Include="App.xaml.fs" />
+    <Resource Include="ApplicationResources.xaml" />
     <Resource Include="ChatzView.xaml" />
     <Resource Include="TickzView.xaml" />
     <Resource Include="ValuzView.xaml" />
-    <Resource Include="MainView.xaml" />
+    <Resource Include="MainWindow.xaml" />
+    <Compile Include="Views.fs" />
     <Resource Include="App.xaml" />
-    <Resource Include="ApplicationResources.xaml" />
+    <Compile Include="App.xaml.fs" />
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="FSharp.ViewModule.Core.Wpf">
+      <HintPath>..\packages\FSharp.ViewModule.Core.0.9.6\lib\net45\FSharp.ViewModule.Core.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FsXaml.Wpf">
       <HintPath>..\packages\FsXaml.Wpf.0.9.4\lib\net45\FsXaml.Wpf.dll</HintPath>
       <Private>True</Private>
