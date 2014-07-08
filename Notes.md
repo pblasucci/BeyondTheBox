@@ -104,6 +104,22 @@ _Media: slides, code, print_
 
 #### Examples
 
+<p><em>tickz</em></p>
+<pre>
+tickz.server (C, Server)
+  # broadcast stock data
+  PUB tcp://*:9003
+  &lt;&lt; [ "(?stock:[A-Z][A-Z0-9]+)" ]
+     [ timestamp :f64            ]
+     [ price     :f64            ]
+
+tickz.client (VB, WinForms)
+  # receive stock data from server
+  SUB tcp://localhost:9003
+  # user adds explicit stock symbols for which to receive data
+  ?&gt; [ "(?stock:[A-Z][A-Z0-9]+)" ]*
+</pre>
+<p><em>chatz</em></p>
 <pre>
 chatz.server (Rust, Console)
   # keeps track of connected (expiring) users
@@ -121,20 +137,9 @@ chatz.client (C#, WinForms)
   # gets messages broadcast by anyone in the group
   SUB tcp://localhost:9002
   ?&gt; [ "" ]
-
-tickz.server (C, Server)
-  # broadcast stock data
-  PUB tcp://*:9003
-  &lt;&lt; [ "(?stock:[A-Z][A-Z0-9]+)" ]
-     [ timestamp :f64            ]
-     [ price     :f64            ]
-
-tickz.client (VB, WinForms)
-  # receive stock data from server
-  SUB tcp://localhost:9003
-  # user adds explicit stock symbols for which to receive data
-  ?&gt; [ "(?stock:[A-Z][A-Z0-9]+)" ]*
-
+</pre>
+<p><em>valuz</em></p>
+<pre>
 valuz.source (Python, Console)
   # sends batch data to worker(s) for processing
   PUSH tcp://*:9004
@@ -168,7 +173,9 @@ valuz.worker (Haskell, Console)
   # receives control signal from reducer
   SUB  tcp://localhost:9006
   ?&gt; [ command :EXIT = 1uy ]
-
+</pre>
+<p><em>dealz</em></p>
+<pre>
 dealz (F#, WPF w/ WinForms charting)
   # chatz, on bg thread
   REQ tcp://localhost:9001
