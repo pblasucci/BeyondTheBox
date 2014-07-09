@@ -22,8 +22,23 @@ Partial Class Main
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        components = New System.ComponentModel.Container
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.Text = "Main"
-    End Sub
+    Me.SuspendLayout
+    '
+    'Main
+    '
+    Me.AutoScaleDimensions = New System.Drawing.SizeF(9!, 20!)
+    Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+    Me.BackColor = System.Drawing.Color.White
+    Me.ClientSize = New System.Drawing.Size(454, 420)
+    Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
+    Me.MaximizeBox = false
+    Me.MaximumSize = New System.Drawing.Size(480, 480)
+    Me.MinimizeBox = false
+    Me.MinimumSize = New System.Drawing.Size(480, 480)
+    Me.Name = "Main"
+    Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
+    Me.Text = "tickz"
+    Me.ResumeLayout(false)
+
+End Sub
 End Class
