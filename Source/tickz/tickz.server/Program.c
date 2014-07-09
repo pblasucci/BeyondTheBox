@@ -4,6 +4,8 @@
 #include "zmq.h"
 #include "czmq.h"
 
+
+// encapsulates point-in-time data for one stock
 typedef struct 
 {
   char*   symbol;
@@ -11,12 +13,7 @@ typedef struct
   double  value;
 } tick_t;
 
-typedef struct
-{
-  zlist_t*  stocks;
-  void*     socket;
-} zloop_data_t;
-
+// helper to create a new data point for a stock
 static tick_t
 tick_new (char *symbol, double value)
 {
@@ -27,24 +24,39 @@ tick_new (char *symbol, double value)
   return tick;
 }
 
+
+// bundle list of stocks and publisher socket (for timer callback)
+typedef struct
+{
+  zlist_t*  stocks;
+  void*     socket;
+} zloop_data_t;
+
+
+// randomly choose positive (+1) or negative (-1)
 static int 
 randsign () 
 { 
   return (rand() % 2 - 1 == 0) ? +1 : -1; 
 }
 
+// randomly choose a value between 0.0 and 1.0
 static double 
 randf () 
 { 
   return (double) rand() / (double) RAND_MAX; 
 }
 
+// calculate a new stock value (based on previous value)
 static double 
 revalue (const double last) 
 { 
   return last + randsign() * randf(); 
 }
 
+
+#ifdef DEBUG
+// helper to print current stock data
 static void 
 showStocks (zlist_t* stocks)
 {
@@ -58,23 +70,35 @@ showStocks (zlist_t* stocks)
     stock = zlist_next(stocks);
   }
 }
+#endif
 
+// timer callback; updates stock data and publishes new info
 static int 
 onloop (zloop_t *loop, int timer, void *arg)
 {
+  // get list of stocks and publisher socket
   zloop_data_t *loopdata = (zloop_data_t *)arg;
 
+  // for each stock ...
   zframe_t *frame = zframe_new_empty();
   tick_t *stock = (tick_t *)zlist_first(loopdata->stocks);
   while (stock != NULL)
   {
+    // update point-in-time data
     stock->timestamp  = time(NULL);
     stock->value      = revalue(stock->value);
 
+    // publish point-in-time-data (each tick field is a seperate frame)
+    
+    // Frame 1: stock symbol (to facilitate topic filtering)
     frame = zframe_new(stock->symbol,strlen(stock->symbol));
     zframe_send(&frame,loopdata->socket,ZFRAME_MORE);
+
+    // Frame 2: timestamp of last update
     frame = zframe_new(&(stock->timestamp),sizeof(stock->timestamp));
     zframe_send(&frame,loopdata->socket,ZFRAME_MORE);
+    
+    // Frame 3: actual stock value
     frame = zframe_new(&(stock->value),sizeof(stock->value));
     zframe_send(&frame,loopdata->socket,0);
 
@@ -84,6 +108,7 @@ onloop (zloop_t *loop, int timer, void *arg)
   
   return 0;
 }
+
 
 /*
 PUB tcp://*:9003
@@ -97,16 +122,17 @@ int main(int argc, const char* argv[])
   srand( (unsigned int)time(NULL) );
 
   // initialize stock data
-  zlist_t *stocks = zlist_new();
-  tick_t msft = tick_new("MSFT",41.78);
-  zlist_append(stocks,&msft);
-  tick_t aapl = tick_new("AAPL",95.35);
-  zlist_append(stocks,&aapl);
+  tick_t msft = tick_new("MSFT", 41.78);
+  tick_t aapl = tick_new("AAPL", 95.35);
   tick_t goog = tick_new("GOOG",571.09);
+  tick_t yhoo = tick_new("YHOO", 34.53);
+  tick_t bbry = tick_new("BBRY", 10.90);
+  
+  zlist_t *stocks = zlist_new();
+  zlist_append(stocks,&msft);
+  zlist_append(stocks,&aapl);
   zlist_append(stocks,&goog);
-  tick_t yhoo = tick_new("YHOO",34.53);
   zlist_append(stocks,&yhoo);
-  tick_t bbry = tick_new("BBRY",10.90);
   zlist_append(stocks,&bbry);
   
   // set up publisher
@@ -119,9 +145,10 @@ int main(int argc, const char* argv[])
   zloop_data_t loopdata;
   loopdata.stocks = stocks;
   loopdata.socket = pub;
+
   // every 1000 ms, update the stocks and publish the new data
   int timer = zloop_timer(loop,1000,0,onloop,&loopdata);
-  zloop_start(loop);
+  zloop_start(loop); //NOTE: CTRL+C will cleanly interrupt the infinite loop
   
   // clean up
   zctx_destroy(&ctx);
