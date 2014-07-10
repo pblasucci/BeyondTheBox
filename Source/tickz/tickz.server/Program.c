@@ -147,7 +147,7 @@ int main(int argc, const char* argv[])
   loopdata.socket = pub;
 
   // every 1000 ms, update the stocks and publish the new data
-  int timer = zloop_timer(loop,1000,0,onloop,&loopdata);
+  int timer = zloop_timer(loop,500,0,onloop,&loopdata); //TOOD: take delay as input
   zloop_start(loop); //NOTE: CTRL+C will cleanly interrupt the infinite loop
   
   // clean up
