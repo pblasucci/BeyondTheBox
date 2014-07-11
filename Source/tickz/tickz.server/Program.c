@@ -118,6 +118,8 @@ PUB tcp://*:9003
 */
 int main(int argc, const char* argv[])
 {
+  SetConsoleTitle(L"tickz.server");
+
   // initialize random number generator
   srand( (unsigned int)time(NULL) );
 
@@ -146,7 +148,7 @@ int main(int argc, const char* argv[])
   loopdata.stocks = stocks;
   loopdata.socket = pub;
 
-  // every 1000 ms, update the stocks and publish the new data
+  // every 500 ms, update the stocks and publish the new data
   int timer = zloop_timer(loop,500,0,onloop,&loopdata); //TOOD: take delay as input
   zloop_start(loop); //NOTE: CTRL+C will cleanly interrupt the infinite loop
   
