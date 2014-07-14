@@ -131,7 +131,7 @@ chatz.server (Rust, Console)
   PUB tcp://*:9002
     &lt;&lt; [ "(?usr:\w+)\037(?msg:\w+)" ]
 
-chatz.client (C#, WinForms)
+chatz.client (C#, WPF)
   # sends messages to server for broadcast
   REQ tcp://localhost:9001
   # gets messages broadcast by anyone in the group
@@ -176,7 +176,7 @@ valuz.worker (Haskell, Console)
 </pre>
 <p><em>dealz</em></p>
 <pre>
-dealz (F#, WPF w/ WinForms charting)
+dealz (F#, ?FunScript, ?WebAPI, ?ServiceStack)
   # chatz, on bg thread
   REQ tcp://localhost:9001
   SUB tcp://localhost:9002

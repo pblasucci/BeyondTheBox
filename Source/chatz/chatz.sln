@@ -3,12 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chatz.client", "chatz.client\chatz.client.csproj", "{BE5846DB-C722-48B4-AC22-5E4A98D18632}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{77D9121C-1435-4492-B536-ABA59F94E178}"
 	ProjectSection(SolutionItems) = preProject
 		chatz.fsx = chatz.fsx
+		chatz.server\chatz.server.rs = chatz.server\chatz.server.rs
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chatz.client", "chatz.client\chatz.client.csproj", "{D63023BD-71AB-4E72-8525-7DB2B0CFBF90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,10 +17,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BE5846DB-C722-48B4-AC22-5E4A98D18632}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE5846DB-C722-48B4-AC22-5E4A98D18632}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE5846DB-C722-48B4-AC22-5E4A98D18632}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE5846DB-C722-48B4-AC22-5E4A98D18632}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D63023BD-71AB-4E72-8525-7DB2B0CFBF90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D63023BD-71AB-4E72-8525-7DB2B0CFBF90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D63023BD-71AB-4E72-8525-7DB2B0CFBF90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D63023BD-71AB-4E72-8525-7DB2B0CFBF90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
