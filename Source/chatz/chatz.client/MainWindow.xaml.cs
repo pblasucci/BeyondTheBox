@@ -27,11 +27,11 @@ namespace chatz.client
       InitializeComponent ();
     }
 
-
-
     protected override void OnInitialized (EventArgs e)
     {
       base.OnInitialized (e);
+
+      var name = System.IO.Path.GetRandomFileName();
 
       Task.Factory.StartNew(() => {
         using(var context = new Context()) 
@@ -46,9 +46,11 @@ namespace chatz.client
           { 
             while (true) 
             {
-              client.Send(Encoding.UTF8.GetBytes("pblasucci\u0037Hello"));
-              var ack = client.Recv();
-              Debug.WriteLine(Encoding.UTF8.GetString(ack));
+              client.Send(Encoding.UTF8.GetBytes(String.Format("{0}\u0037Hello", name)));
+              foreach (var c in client.RecvAll().Select(Encoding.UTF8.GetString))
+              {
+                Debug.WriteLine(c); 
+              }
               
               var msg = new Byte[0][];
               if (dialog.TryGetInput(100, out msg))
