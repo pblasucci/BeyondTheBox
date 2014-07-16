@@ -55,23 +55,6 @@ revalue (const double last)
 }
 
 
-#ifdef DEBUG
-// helper to print current stock data
-static void 
-showStocks (zlist_t* stocks)
-{
-  tick_t *stock = (tick_t *)zlist_first(stocks);
-  while (stock != NULL)
-  {
-    printf( "%s = { value = %f; timestamp = %i }\n"
-          , stock->symbol
-          , stock->value
-          , stock->timestamp );
-    stock = zlist_next(stocks);
-  }
-}
-#endif
-
 // timer callback; updates stock data and publishes new info
 static int 
 onloop (zloop_t *loop, int timer, void *arg)

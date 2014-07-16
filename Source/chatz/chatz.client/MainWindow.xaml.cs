@@ -44,7 +44,7 @@ namespace chatz.client
           
           try
           { 
-            while (true) 
+            while (true)
             {
               client.Send(Encoding.UTF8.GetBytes(String.Format("{0}\u0037Hello", name)));
               foreach (var c in client.RecvAll().Select(Encoding.UTF8.GetString))
