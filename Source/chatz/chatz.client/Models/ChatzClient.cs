@@ -22,11 +22,11 @@ namespace chatz.client
     }
     private Byte[] message (String handle, String message)
     { 
-      return encode(String.Format("{0}\u0037{1}", handle, message));
+      return encode(String.Format("{0}\u221E{1}", handle, message));
     }
     private Byte[] keepAlive (String handle) 
     { 
-      return message(handle,""); 
+      return encode(handle); 
     }
 
     public EventHandler<MessageReceivedEventArgs> MessageReceived;
@@ -35,7 +35,7 @@ namespace chatz.client
 
     private void broadcast (Object state) { 
       var message = decode(state as Byte[]);
-      var parts   = message.Split('\u0037');
+      var parts   = message.Split('\u221E');
       var args    = new MessageReceivedEventArgs(parts[0], parts[1]);
 
       Debug.WriteLine("[{0}] {1}", DateTime.Now, message);
@@ -61,14 +61,11 @@ namespace chatz.client
         while (true)
         {
           String pending;
-          if (Pending.TryDequeue(out pending))
-          { 
-            client.Send(message(pending,handle));
-          }
-          else
-          { 
-            client.Send(keepAlive(handle));
-          }
+          switch (Pending.TryDequeue(out pending))
+          {
+            case true : client.Send(message(handle,pending)); break; 
+            case false: client.Send(keepAlive(handle));       break;
+          }          
           client.RecvAll(); // IGNORE
               
           var dispatch = new Byte[0][];

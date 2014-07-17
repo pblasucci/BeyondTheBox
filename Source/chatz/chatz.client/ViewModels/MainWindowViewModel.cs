@@ -8,6 +8,11 @@ namespace chatz.client
   public class MainWindowViewModel :INotifyPropertyChanged
   {
     public event PropertyChangedEventHandler PropertyChanged;
+    protected void Notify (String name)
+    {
+      if (PropertyChanged != null)
+        PropertyChanged(this, new PropertyChangedEventArgs(name));
+    }
 
     private String handle_;
     public  String Handle
@@ -15,11 +20,28 @@ namespace chatz.client
       get { return handle_; }
       set
       { 
-        handle_ = value;
-        Notify("Handle");
+        if (value != handle_)
+        {
+          handle_ = value;
+          Notify("Handle");
+        }
       }
     }
     
+    private String input_;
+    public  String Input
+    {
+      get { return input_; }
+      set
+      { 
+        if (value != input_)
+        {
+          input_ = value;
+          Notify("Input");
+        }
+      }
+    }
+
     private readonly ObservableCollection<SentMessage> messages_;
     public ObservableCollection<SentMessage> Messages
     {
@@ -36,12 +58,12 @@ namespace chatz.client
       model.MessageReceived += (_, e) => { messages_.Add(e.Message); };
       
       Handle = model.Handle;
+
+      sendMessage = new RelayCommand(_ => { this.model.Send(this.Input ?? "");
+                                            this.Input = null; });
     }
 
-    protected void Notify (String name)
-    {
-      if (PropertyChanged != null)
-        PropertyChanged(this, new PropertyChangedEventArgs(name));
-    }
+    private readonly RelayCommand sendMessage;
+    public RelayCommand SendMessage { get { return sendMessage; } }
   }
 }

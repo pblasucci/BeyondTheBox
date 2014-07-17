@@ -1,5 +1,11 @@
 ﻿<Application x:Class="chatz.client.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <Application.Resources/>
+  <Application.Resources>
+    <!-- Images -->
+    <BitmapImage x:Key="HelpIcon" 
+                 UriSource="/chatz.client;component/Images/Help.ico" />
+    <BitmapImage x:Key="SendIcon" 
+                 UriSource="/chatz.client;component/Images/Send.ico" />
+  </Application.Resources>
 </Application>

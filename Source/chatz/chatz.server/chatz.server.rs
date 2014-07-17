@@ -8,7 +8,7 @@ use zmq::{Context, REP, PUB};
 // helper to convert incoming request (opaque string) into some usable data
 fn validate_msg(message : &str) -> Result<(String,Option<String>),&'static str> {
   // decomposes opaque string into data
-  let parts : Vec<&str> = message.split_str("\u0037").collect();
+  let parts : Vec<&str> = message.split_str("\u221E").collect();
   match parts.len() {
     1 => {
       let key = parts.get(0).to_string();
