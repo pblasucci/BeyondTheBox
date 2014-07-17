@@ -79,9 +79,11 @@ fn main() {
       // request contains data (ie: a message for the group)
       // ... update client expiry
       // ... broadcast message to group
-      Ok((client, Some(msg))) => {
+      Ok((client, Some(_))) => {
         clients.insert(client, time::precise_time_s() + 5.0);
-        dialog.send_str(msg.as_slice(), 0).unwrap();
+        //NOTE: per protocol, just publish message as originally received
+        //NOTE: more robust implementation would broadcast more complex message
+        dialog.send_str(message.as_slice(), 0).unwrap();
       },
       // invalid request
       // ... log it and move on
