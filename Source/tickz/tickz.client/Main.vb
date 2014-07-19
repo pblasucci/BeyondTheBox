@@ -104,6 +104,12 @@ Public Class Main
 
   ' Initialization
   Private Sub Main_Load(Sender As Object, Args As EventArgs) Handles Me.Load
+    Dim input = My.Application.CommandLineArgs
+    If  input.Count > 0 Then
+      ' NOTE: input checking should be more thorough
+      StockComboBox.SelectedItem = input(0).Trim()
+    End If
+
     TickProxy.Start() ' Start primary loop on bg thread
   End Sub
   
@@ -115,10 +121,11 @@ Public Class Main
 
   ' Respond to user's subscription change request
   Private Sub StockComboBox_SelectedIndexChanged(Sender As Object, Args As EventArgs) Handles StockComboBox.SelectedIndexChanged
+    Dim Stock = CStr(StockComboBox.SelectedItem)    
     ' Reset UI
     StockLabel.BackColor  = Color.White
+    Me.Text = String.Format("tickz - {0}", Stock)
     ' Push new stock symbol to bg thread
-    Dim Stock = CStr(StockComboBox.SelectedItem)
     StockQueue.Enqueue(Stock)
   End Sub
 

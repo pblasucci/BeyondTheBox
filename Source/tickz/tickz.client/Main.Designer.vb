@@ -69,7 +69,6 @@ Partial Class Main
     Me.Controls.Add(Me.StockLabel)
     Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
     Me.MaximizeBox = false
-    Me.MinimizeBox = false
     Me.Name = "Main"
     Me.Text = "tickz"
     Me.ResumeLayout(false)
