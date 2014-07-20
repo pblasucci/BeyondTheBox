@@ -2,14 +2,16 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:a="clr-namespace:chatz.client"
-        Title="chatz"
+        Title="{Binding Handle, StringFormat='chatz - {0}'}"
         MinHeight="320" MinWidth="320"
-        Height="480" Width="480"
-        WindowStartupLocation="CenterScreen">
+        Height="480" Width="480">
+ 
   <Window.Resources>
     <a:LocalTimeFromUtcConverter x:Key="LocalFromUTC" />
   </Window.Resources>
+ 
   <Grid FocusManager.FocusedElement="{Binding ElementName=Input}">
+  
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"  />
       <RowDefinition Height="*"     />
@@ -19,6 +21,7 @@
       <ColumnDefinition Width="*"   />
       <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
+    
     <!-- Row 0 -->
     <TextBlock  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
                 Margin="6 6 6 3"
@@ -35,6 +38,7 @@
       <ListBox.ItemTemplate>
         <DataTemplate>
           <Grid>
+    
             <Grid.RowDefinitions>
               <RowDefinition Height="Auto"  />
               <RowDefinition Height="*"     />
@@ -43,6 +47,7 @@
               <ColumnDefinition Width="*"     />
               <ColumnDefinition Width="Auto"  />
             </Grid.ColumnDefinitions>
+            
             <!-- Row 0 -->
             <TextBlock  Grid.Row="0" Grid.Column="0" 
                         Text="{Binding SentBy}"

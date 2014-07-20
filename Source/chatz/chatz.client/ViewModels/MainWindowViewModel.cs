@@ -1,54 +1,19 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Input;
+
+using messageList = System.Collections.ObjectModel.ObservableCollection<chatz.client.SentMessage>;
 
 namespace chatz.client
 {
   public class MainWindowViewModel :INotifyPropertyChanged
   {
-    public event PropertyChangedEventHandler PropertyChanged;
-    protected void Notify (String name)
-    {
-      if (PropertyChanged != null)
-        PropertyChanged(this, new PropertyChangedEventArgs(name));
-    }
-
-    private String handle_;
-    public  String Handle
-    {
-      get { return handle_; }
-      set
-      { 
-        if (value != handle_)
-        {
-          handle_ = value;
-          Notify("Handle");
-        }
-      }
-    }
+    private readonly  ChatzClient   model;
+    private readonly  RelayCommand  sendMessage;
+    private readonly  messageList   messages_;
+    private           String        handle_;
+    private           String        input_;
     
-    private String input_;
-    public  String Input
-    {
-      get { return input_; }
-      set
-      { 
-        if (value != input_)
-        {
-          input_ = value;
-          Notify("Input");
-        }
-      }
-    }
-
-    private readonly ObservableCollection<SentMessage> messages_;
-    public ObservableCollection<SentMessage> Messages
-    {
-      get { return messages_; }
-    }
-
-    private readonly ChatzClient model;
     public MainWindowViewModel (ChatzClient model)
     { 
       messages_ = new ObservableCollection<SentMessage>();
@@ -63,7 +28,42 @@ namespace chatz.client
                                             this.Input = null; });
     }
 
-    private readonly RelayCommand sendMessage;
+    public event PropertyChangedEventHandler PropertyChanged;
+
     public RelayCommand SendMessage { get { return sendMessage; } }
+    
+    public messageList Messages { get { return messages_; } }
+
+    public  String Handle
+    {
+      get { return handle_; }
+      set
+      { 
+        if (value != handle_)
+        {
+          handle_ = value;
+          Notify("Handle");
+        }
+      }
+    }
+    
+    public  String Input
+    {
+      get { return input_; }
+      set
+      { 
+        if (value != input_)
+        {
+          input_ = value;
+          Notify("Input");
+        }
+      }
+    }
+
+    protected void Notify (String name)
+    {
+      if (PropertyChanged != null)
+        PropertyChanged(this, new PropertyChangedEventArgs(name));
+    }    
   }
 }

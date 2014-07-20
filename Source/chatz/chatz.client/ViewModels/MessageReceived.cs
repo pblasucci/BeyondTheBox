@@ -30,10 +30,7 @@ namespace chatz.client
     }
     
     public MessageReceivedEventArgs(String sender, String message)
-      : this (new SentMessage(sender, message))
-    {
-      /* PUNT */
-    }
+      : this (new SentMessage(sender, message)) { }
 
     public SentMessage Message { get { return message_; } }
   }

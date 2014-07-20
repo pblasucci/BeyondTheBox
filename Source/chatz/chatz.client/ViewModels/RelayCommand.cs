@@ -4,33 +4,14 @@ using System.Windows.Input;
 
 namespace chatz.client
 {
-  /// <summary>
-  /// A command whose sole purpose is to 
-  /// relay its functionality to other
-  /// objects by invoking delegates. The
-  /// default return value for the CanExecute
-  /// method is 'true'.
-  /// </summary>
+  // A command that relays its functionality to other by invoking delegates;
+  // Default for the CanExecute delegate returns 'true'
   public class RelayCommand :ICommand
   {
     private readonly Action<Object>       execute_;
     private readonly Func<Object,Boolean> canExecute_;
-
-    /// <summary>
-    /// Creates a new command that can always execute.
-    /// </summary>
-    /// <param name="execute">The execution logic.</param>
-    public RelayCommand (Action<Object> execute)
-      : this (execute,null)
-    {
-      /* PUNT */
-    }
-
-    /// <summary>
-    /// Creates a new command.
-    /// </summary>
-    /// <param name="execute">The execution logic.</param>
-    /// <param name="canExecute">The execution status logic.</param>
+    
+    // Creates a new command, which relays to the given delegates
     public RelayCommand (Action<Object>         execute
                         ,Func<Object, Boolean>  canExecute)
     {
@@ -41,21 +22,25 @@ namespace chatz.client
       canExecute_ = canExecute;
     }
 
-    [DebuggerStepThrough]
-    public Boolean CanExecute (Object parameters)
-    {
-      return canExecute_ == null ? true : canExecute_(parameters);
-    }
+    // Creates a new command that can always execute
+    public RelayCommand (Action<Object> execute) : this (execute,null) { }
 
+    // Connects command status changes to WPF CommandManager
     public event EventHandler CanExecuteChanged
     {
       add     { CommandManager.RequerySuggested += value; }
       remove  { CommandManager.RequerySuggested -= value; }
     }
 
-    public void Execute (Object parameters)
+    // If provided, Defer to delegate; otherwise return 'true'
+    [DebuggerStepThrough]
+    public Boolean CanExecute (Object parameters)
     {
-      execute_(parameters);
+      return canExecute_ == null ? true : canExecute_(parameters);
     }
+
+    // Punt to delegate
+    public void Execute (Object parameters) { execute_(parameters); }
   }
 }
+ 

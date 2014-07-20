@@ -5,7 +5,9 @@
         Height="160" Width="400"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
+  
   <Grid FocusManager.FocusedElement="{Binding ElementName=Input}">
+  
     <Grid.RowDefinitions>
       <RowDefinition Height="*"     />
       <RowDefinition Height="Auto"  />
@@ -16,6 +18,7 @@
       <ColumnDefinition Width="*"    />
       <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
+    
     <!-- Row 0 -->
     <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
            Source="{StaticResource HelpIcon}"

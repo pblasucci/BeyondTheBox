@@ -7,7 +7,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "tickz.client", "tickz.clien
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tickz.server", "tickz.server\tickz.server.vcxproj", "{A7C6C6F6-A10E-4999-A4B0-D8296E162D9E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D43C313F-2BAE-4894-B238-5222F5AA2FE1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{C86BBB67-9B66-4D6D-ACAD-5EA5E42017A0}"
 	ProjectSection(SolutionItems) = preProject
 		tickz.fsx = tickz.fsx
 	EndProjectSection

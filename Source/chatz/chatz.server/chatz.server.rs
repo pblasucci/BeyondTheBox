@@ -1,3 +1,15 @@
+/*******************************************************************************
+ *                                                                             *
+ * NOTE                                                                        *
+ *   On Windows:                                                               *
+ *     - place libzmq.dll, libzmq.rlib in the same folder as chatz.server.rs   *
+ *     - compile with: rustc chatz.server.rs -L . -o chatz.server.exe          *
+ *                                                                             *
+ ******************************************************************************/
+
+#![feature(phase)]
+#[phase(plugin, link)]
+extern crate log;
 extern crate time;
 extern crate zmq;
 
@@ -9,10 +21,11 @@ use zmq::{Context, REP, PUB};
 fn validate_msg(message : &str) -> Result<(String,Option<String>),&'static str> {
   // decomposes opaque string into data
   let parts : Vec<&str> = message.split_str("\u221E").collect();
+  debug!("Received message with {} parts", parts.len());
   match parts.len() {
     1 => {
       let key = parts.get(0).to_string();
-      // no messaage, return "keep-alive" data
+      // no message, return "keep-alive" data
       Ok ((key, None))
     },
     2 => {
@@ -22,12 +35,21 @@ fn validate_msg(message : &str) -> Result<(String,Option<String>),&'static str> 
       Ok ((key, Some(msg)))
     },
     // bad message!
-    _ => Err("invalid message"),
+    _ => Err("Invalid message"),
   }
 }
 
 
-// helpler to convert list of connected clients into list of data for reply
+// helper to track or extend active an active client's expiry
+fn extend_client(clients : &mut HashMap<String, f64>, client : String) {
+  // give active client 5 seconds to ping us again
+  let expiry = time::precise_time_s() + 5.0;
+  debug!("Set {} expiry to {}", client, expiry);
+  clients.insert(client, expiry);
+}
+
+
+// helper to convert list of connected clients into list of data for reply
 fn build_reply<'a>(clients : &'a HashMap<String, f64>) -> Vec<(&'a String, int)> {
   let final  = clients.len() - 1;
   // pair client name with correct ZMQ flag (required for mutlipart messages)
@@ -54,6 +76,8 @@ fn main() {
 
   assert!(server.bind("tcp://*:9001").is_ok());
   assert!(dialog.bind("tcp://*:9002").is_ok());
+  debug!("Listening on port 9001");
+  debug!("Broadcasting on port 9002");
 
   // set up main loop and list of connected clients
   let mut clients : HashMap<String,f64> = HashMap::new();
@@ -74,20 +98,21 @@ fn main() {
       // request is just a "keep-alive" (ie: no message)
       // ... update client expiry
       Ok((client, None)) => {
-        clients.insert(client, time::precise_time_s() + 5.0);
+        extend_client(&mut clients, client);
       },
       // request contains data (ie: a message for the group)
       // ... update client expiry
       // ... broadcast message to group
       Ok((client, Some(_))) => {
-        clients.insert(client, time::precise_time_s() + 5.0);
+         extend_client(&mut clients, client);
         //NOTE: per protocol, just publish message as originally received
         //NOTE: more robust implementation would broadcast more complex message
         dialog.send_str(message.as_slice(), 0).unwrap();
+        debug!("Broadcast '{}'", message.to_string());
       },
       // invalid request
       // ... log it and move on
-      Err(error) => println!("ERR: {}", error),
+      Err(error) => error!("{}", error),
     }
 
     // send reply consisting of actively connected clients

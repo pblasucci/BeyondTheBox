@@ -1,8 +1,7 @@
 ﻿using fszmq;
 using System;
-using System.Diagnostics;
 using System.Collections.Concurrent;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,26 +11,40 @@ namespace chatz.client
   {
     private static ConcurrentQueue<String> Pending = new ConcurrentQueue<String>();
 
+    public EventHandler<MessageReceivedEventArgs> MessageReceived;
+
+    public String Handle { get; private set; }
+
+    public ChatzClient (String handle) { 
+      this.Handle = handle;
+      
+      var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
+      var state     = Tuple.Create(handle,scheduler);
+
+      Task.Factory.StartNew (proxyLoop, state, TaskCreationOptions.LongRunning);
+    }
+    
+    public void Send (String message) { Pending.Enqueue(message); }
+
     private Byte[] encode (String value) 
     { 
       return System.Text.Encoding.UTF8.GetBytes(value);
     }
+    
     private String decode (Byte[] value) 
     { 
       return System.Text.Encoding.UTF8.GetString(value);
     }
+    
     private Byte[] message (String handle, String message)
     { 
       return encode(String.Format("{0}\u221E{1}", handle, message));
     }
+
     private Byte[] keepAlive (String handle) 
     { 
       return encode(handle); 
     }
-
-    public EventHandler<MessageReceivedEventArgs> MessageReceived;
-
-    public String Handle { get; private set; }
 
     private void broadcast (Object state) { 
       var message = decode(state as Byte[]);
@@ -63,8 +76,8 @@ namespace chatz.client
           String pending;
           switch (Pending.TryDequeue(out pending))
           {
-            case true : client.Send(message(handle,pending)); break; 
-            case false: client.Send(keepAlive(handle));       break;
+            case true : client.Send(message   (handle,pending)); break; 
+            case false: client.Send(keepAlive (handle        )); break;
           }          
           client.RecvAll(); // IGNORE
               
@@ -82,19 +95,6 @@ namespace chatz.client
           Thread.Sleep(500);
         }
       }
-    }
-
-    public ChatzClient (String handle) { 
-      this.Handle   = handle;
-      var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
-      var state     = Tuple.Create(handle,scheduler);
-
-      Task.Factory.StartNew (proxyLoop, state, TaskCreationOptions.LongRunning);
-    }
-    
-    public void Send (String message) 
-    {
-      Pending.Enqueue(message);
     }
   }
 }
