@@ -61,7 +61,7 @@ fn build_reply<'a>(clients : &'a HashMap<String, f64>) -> Vec<(&'a String, int)>
 
 
 // # keeps track of connected (expiring) users
-//   # returns list of connected users
+// # returns list of connected users
 //   REP tcp://*:9001
 //     -> [ "(?usr:\w+)(\037(?msg:\w+))?" ]
 //     <- [ "(?usr:\w+)" ]+
