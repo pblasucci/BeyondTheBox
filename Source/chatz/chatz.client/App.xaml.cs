@@ -50,6 +50,11 @@ namespace chatz.client
         // launch GUI
         Current.MainWindow.Show();
       }
+      else
+      {
+        // no handle given, user has opted to exit application
+        Current.Shutdown();
+      }
     }
   }
 }
