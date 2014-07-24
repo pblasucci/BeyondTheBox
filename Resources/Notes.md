@@ -104,52 +104,54 @@ _Media: slides, code, print_
 
 #### Examples
 
-<p><em>tickz</em></p>
-<pre>
-tickz.server (C, Server)
-  # broadcast stock data
-  PUB tcp://*:9003
-  &lt;&lt; [ "(?stock:[A-Z][A-Z0-9]+)" ]
-     [ timestamp :f64            ]
-     [ price     :f64            ]
-
-tickz.client (VB, WinForms)
-  # receive stock data from server
-  SUB tcp://localhost:9003
-  # user adds explicit stock symbols for which to receive data
-  ?&gt; [ "(?stock:[A-Z][A-Z0-9]+)" ]*
-</pre>
 <p><em>chatz</em></p>
 <pre>
 chatz.server (Rust, Console)
   # keeps track of connected (expiring) users
   # returns list of connected users
   ROUTER tcp://*:9001
-    -&gt; [ "(?usr:\w+)(\037(?msg:\w+))?" ]
-    &lt;- [ "(?usr:\w+)" ]+
+    -&gt; [ UTF8(?usr:\w+)(\037(?msg:\w+)) ]
+    &lt;- [ UTF8(?usr:\w+) ]+
   # broadcasts one user's message to entire group
   PUB tcp://*:9002
-    &lt;&lt; [ "(?usr:\w+)\037(?msg:\w+)" ]
+    &lt;&lt; [ UTF8(?usr:\w+)\037(?msg:\w+) ]
 
 chatz.client (C#, WPF)
   # sends messages to server for broadcast
   REQ tcp://localhost:9001
   # gets messages broadcast by anyone in the group
   SUB tcp://localhost:9002
-  ?&gt; [ "" ]
+  ?&gt; [ UTF8("") ]
 </pre>
+
+<p><em>tickz</em></p>
+<pre>
+tickz.server (C, Server)
+  # broadcast stock data
+  PUB tcp://*:9003
+  &lt;&lt; [ stock     : UTF8([A-Z][A-Z0-9]+) ]
+     [ timestamp : f64                  ]
+     [ price     : f64                  ]
+
+tickz.client (VB, WinForms)
+  # receive stock data from server
+  SUB tcp://localhost:9003
+  # user adds explicit stock symbols for which to receive data
+  ?&gt; [ stock : UTF8([A-Z][A-Z0-9]+) ]*
+</pre>
+
 <p><em>valuz</em></p>
 <pre>
-source |----------[size of next batch]----------> reduce
-source <----------[start of new batch]----------| reduce
-source |---[domain]---> worker
-                        worker |---[codomain]---> reduce
-                        worker <---[shutdown]---| reduce
+source |----------[size of next batch]----------&gt; reduce
+source &lt;----------[start of new batch]----------| reduce
+source |---[domain]---&gt; worker
+                        worker |---[codomain]---&gt; reduce
+                        worker &lt;---[shutdown]---| reduce
 
 valuz.source (Python, Console)
 # sends batch size data to reducer
   PUSH tcp://localhost:9006
-  &lt;- [ command : START = 0uy ]
+  &lt;- [ count : i32 ]
 # sends batch data to worker(s) for processing
   PUSH tcp://*:9004
   &lt;- [ stock  : UTF8([A-Z][A-Z0-9]+)   ]
@@ -157,19 +159,19 @@ valuz.source (Python, Console)
      [ price  : f64                    ]
 # receives start signal from reducer
   SUB  tcp://localhost:9006
-  ?&gt; [ command : START = 0uy ]
+  ?&gt; [ UTF8("batch.start") ]
 
 valuz.reduce (Python, Console)
 # gets batch size from source
 # gets results of individual calculation from worker(s)
   PULL tcp://*:9005
-  -&gt; [ size  : i32 ]
+  -&gt; [ count : i32 ]
   -&gt; [ value : f64 ]
 # sends control signal to source
 # sends control signal to worker(s)
   PUB tcp://*:9006
-  &lt;&lt; [ comand : START = 0uy ]
-  &lt;&lt; [ comand : EXIT  = 1uy ]
+  &lt;&lt; [ UTF8("batch.start") ]
+  &lt;&lt; [ UTF8("batch.leave") ]
 
 valuz.worker (Haskell, Console)
 # get input data from source
@@ -183,7 +185,7 @@ valuz.worker (Haskell, Console)
   -&gt; [ value : f64 ]
 # receives control signal from reducer
   SUB  tcp://localhost:9006
-    ?&gt; [ command : EXIT = 1uy ]
+    ?&gt; [ UTF8("batch.leave") ]
 </pre>
 <p><em>dealz</em></p>
 <pre>
