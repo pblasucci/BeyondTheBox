@@ -140,38 +140,50 @@ chatz.client (C#, WPF)
 </pre>
 <p><em>valuz</em></p>
 <pre>
+source |----------[size of next batch]----------> reduce
+source <----------[start of new batch]----------| reduce
+source |---[domain]---> worker
+                        worker |---[codomain]---> reduce
+                        worker <---[shutdown]---| reduce
+
 valuz.source (Python, Console)
-  # sends batch data to worker(s) for processing
+# sends batch size data to reducer
+  PUSH tcp://localhost:9006
+  &lt;- [ command : START = 0uy ]
+# sends batch data to worker(s) for processing
   PUSH tcp://*:9004
-  &lt;- [ "(?stock:[A-Z][A-Z0-9]+)"         ]
-     [ action :(BUY = 1uy | SELL = -1uy) ]
-     [ price  :f64                       ]
-  # receives control signal from reducer
-  SUB tcp://localhost:9006
-  ?&gt; [ command :START = 0uy ]
+  &lt;- [ stock  : UTF8([A-Z][A-Z0-9]+)   ]
+     [ action : (BUY = +1 | SELL = -1) ]
+     [ price  : f64                    ]
+# receives start signal from reducer
+  SUB  tcp://localhost:9006
+  ?&gt; [ command : START = 0uy ]
 
 valuz.reduce (Python, Console)
-  # gets results of individual calculation from worker(s)
+# gets batch size from source
+# gets results of individual calculation from worker(s)
   PULL tcp://*:9005
-  -&gt; [  command :(READY = 2uy)  ]
-  -&gt; [ "(?stock:[A-Z][A-Z0-9]+)" ]
-     [ value :f64                ]
-  # sends control signals to source, worker(s)
+  -&gt; [ size  : i32 ]
+  -&gt; [ value : f64 ]
+# sends control signal to source
+# sends control signal to worker(s)
   PUB tcp://*:9006
-  &lt;&lt; [ comand :START = 0uy ] # to source, when worker(s) ready
-  &lt;&lt; [ comand :EXIT  = 0uy ] # to worker(s), after completion
-  # displays aggregate calculation
+  &lt;&lt; [ comand : START = 0uy ]
+  &lt;&lt; [ comand : EXIT  = 1uy ]
 
 valuz.worker (Haskell, Console)
-  # get input data from source
-  # performs calculation
+# get input data from source
+# performs calculation
   PULL tcp://localhost:9004
-  # sends "ready" signal to reducer
-  # sends calculated result to reducer
+  -&gt; [ stock  : UTF8([A-Z][A-Z0-9]+)   ]
+     [ action : (BUY = +1 | SELL = -1) ]
+     [ price  : f64                    ]
+# sends calculated result to reducer
   PUSH tcp://localhost:9005
-  # receives control signal from reducer
+  -&gt; [ value : f64 ]
+# receives control signal from reducer
   SUB  tcp://localhost:9006
-  ?&gt; [ command :EXIT = 1uy ]
+    ?&gt; [ command : EXIT = 1uy ]
 </pre>
 <p><em>dealz</em></p>
 <pre>
