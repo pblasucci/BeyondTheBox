@@ -143,10 +143,9 @@ chatz.client (C#, WPF)
 valuz.source (Python, Console)
   # sends batch data to worker(s) for processing
   PUSH tcp://*:9004
-  &lt;- [ "(?stock:[A-Z][A-Z0-9]+)"        ]
-     [ action :(BUY = 0uy | SELL = 1uy) ]
-     [ shares :i32                      ]
-     [ price  :f64                      ]
+  &lt;- [ "(?stock:[A-Z][A-Z0-9]+)"         ]
+     [ action :(BUY = 1uy | SELL = -1uy) ]
+     [ price  :f64                       ]
   # receives control signal from reducer
   SUB tcp://localhost:9006
   ?&gt; [ command :START = 0uy ]

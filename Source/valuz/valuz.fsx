@@ -1,0 +1,31 @@
+open System
+open System.Diagnostics
+open System.IO
+
+// helper for parsing Ints
+let (|Int|_|) value =
+  match Int32.TryParse value with
+  | true ,i -> Some i
+  | false,_ -> None
+
+
+do (* PROGRAM *)
+  // path to worker executable
+  let worker = Path.Combine (__SOURCE_DIRECTORY__
+                             ,"valuz.worker/valuz.worker.exe")
+  // path to server code
+  let serverDir  = Path.Combine (__SOURCE_DIRECTORY__,"valuz.server")
+  let source     = Path.Combine (serverDir,"valuz.source.py")
+  let reduce     = Path.Combine (serverDir,"valuz.reduce.py")
+
+  // program configuration
+  let workerCount = match fsi.CommandLineArgs with
+                    | [| _; Int(i) |]  -> i
+                    | _                -> 1
+
+  // launch up to N workers
+  for i in 1 .. workerCount do Process.Start worker |> ignore
+
+  // launch server
+  Process.Start ("python",reduce) |> ignore
+  Process.Start ("python",source) |> ignore

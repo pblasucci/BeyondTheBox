@@ -1,44 +1,47 @@
-import zmq
 import random
 import time
+import zmq
 
-try:
-    raw_input
-except NameError:
-    # Python 3
-    raw_input = input
+## sends batch data to worker(s) for processing
+#  PUSH tcp://*:9004
+#  <- [ stock  : UTF8([A-Z][A-Z0-9]+)          ]
+#     [ action : (BUY = 1 | SELL = -1) => UTF8 ]
+#     [ price  : f64 => UTF8                   ]
+## sends "start of batch" signal to reducer
+#  PUSH tcp://localhost:9006
+#  <- [ command : START = 0uy ]
 
-context = zmq.Context()
+stocks = [ (b"MSFT",  41.78)
+         , (b"AAPL",  95.35)
+         , (b"GOOG", 571.09)
+         , (b"YHOO",  34.53)
+         , (b"BBRY",  10.90) ]
 
-# Socket to send messages on
-sender = context.socket(zmq.PUSH)
-sender.bind("tcp://*:9004")
-
-# Socket with direct access to the sink: used to syncronize start of batch
-sink = context.socket(zmq.PUSH)
-sink.connect("tcp://localhost:9005")
-
-print("Press Enter when the workers are ready: ")
-_ = raw_input()
-print("Sending tasks to worker...")
-
-# The first message is "0" and signals start of batch
-sink.send(b'0')
-
-# Initialize random number generator
 random.seed()
 
-# Send 100 tasks
-total_msec = 0
-for task_nbr in range(100):
+def order ():
+  (stock,base) = stocks[random.randint(0, 4)]
+  buySell      = random.choice([1, -1])
+  price        = base + random.uniform(-3.0,3.0)
+  return  [ stock
+          , str(buySell).encode('UTF8')
+          , str(price  ).encode('UTF8') ]
 
-    # Random workload from 1 to 100 msecs
-    workload = random.randint(1, 100)
-    total_msec += workload
 
-    sender.send_string(u'%i' % workload)
+context = zmq.Context()
+source = context.socket(zmq.PUSH)
+source.bind("tcp://*:9004")
+reduce = context.socket(zmq.PUSH)
+reduce.connect("tcp://localhost:9005")
 
-print("Total expected cost: %s msec" % total_msec)
+_ = input("Press Enter when the workers are ready ")
+print("Sending tasks to worker...")
 
-# Give 0MQ time to deliver
+reduce.send(b'0')
+
+for _ in range(100):
+  source.send_multipart(order())
+
 time.sleep(1)
+
+_ = input("Press <RETURN> to exit ")

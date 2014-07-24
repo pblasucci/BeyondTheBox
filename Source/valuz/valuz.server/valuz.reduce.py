@@ -1,40 +1,44 @@
+import struct
 import sys
 import time
 import zmq
 
+## gets results of individual calculation from worker(s)
+#  PULL tcp://*:9005
+#  -> [ command : READY = 0uy ] # from source, to start batch
+#  -> [ value   : UTF8 => f64 ] # from worker(s), for processing
+## sends control signals to source, worker(s)
+#  PUB tcp://*:9006
+#  << [ comand : EXIT = 0uy ] # to worker(s), after completion
+## displays aggregate calculation
+
 context = zmq.Context()
+combine = context.socket(zmq.PULL)
+combine.bind("tcp://*:9005")
+goodbye = context.socket(zmq.PUB)
+goodbye.bind("tcp://*:9006")
 
-# Socket to receive messages on
-receiver = context.socket(zmq.PULL)
-receiver.bind("tcp://*:9005")
+combine.recv()
 
-# Socket for worker control
-controller = context.socket(zmq.PUB)
-controller.bind("tcp://*:9006")
-
-# Wait for start of batch
-receiver.recv()
-
-# Start our clock now
 tstart = time.time()
 
-# Process 100 confirmiations
-for task_nbr in range(100):
-    receiver.recv()
-    if task_nbr % 10 == 0:
+value = 0
+for task in range(100):
+    value += float(combine.recv().decode('UTF8'))
+    if task % 10 == 0:
         sys.stdout.write(":")
     else:
         sys.stdout.write(".")
     sys.stdout.flush()
 
-# Calculate and report duration of batch
 tend = time.time()
 tdiff = tend - tstart
-total_msec = tdiff * 1000
-print("Total elapsed time: %d msec" % total_msec)
+total = tdiff * 1000
+print("Total elapsed time: %d msec" % total)
+print("Value: %d" % value)
 
-# Send kill signal to workers
-controller.send(b"KILL")
+goodbye.send(b'0')
 
-# Finished
-time.sleep(1)  # Give 0MQ time to deliver
+time.sleep(1)
+
+_ = input("Press <RETURN> to exit")
