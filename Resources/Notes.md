@@ -185,33 +185,8 @@ valuz.worker (Haskell, Console)
 </pre>
 <p><em>dealz</em></p>
 <pre>
-dealz (F#, ?FunScript, ?WebAPI, ?ServiceStack)
-  # chatz, on bg thread
-  REQ tcp://localhost:9001
-  SUB tcp://localhost:9002
-  ?&gt; [ "" ]
-  # tickz, on bg thread
-  SUB tcp://localhost:9003
-  ?&gt; [ "(?sym:[A-Z][A-Z0-9]+)" ]*
-  # valuz, on bg thread
-  PUSH tcp://*:9004
-  &lt;- [ "(?stock:[A-Z][A-Z0-9]+)"        ]
-     [ action :(BUY = 0uy | SELL = 1uy) ]
-     [ shares :i32                      ]
-     [ price  :f64                      ]
-  PULL tcp://*:9005
-  -&gt; [ command :(READY = 2uy) ]
-  -&gt; [ "(?stock:[A-Z][A-Z0-9]+)" ]
-     [ value :f64                ]
-  PUB  tcp://*:9006
-  &lt;&lt; [ comand :EXIT = 0uy ] # to worker, after completion
-  # monitor, on bg thread
-  PAIR inproc://monitor.chatz.req
-  PAIR inproc://monitor.chatz.sub
-  PAIR inproc://monitor.tickz.sub
-  PAIR inproc://monitor.valuz.push
-  PAIR inproc://monitor.valuz.pull
-  PAIR inproc://monitor.valuz.pub
+dealz (F# + Signal, Console w/ HTML + JS + CSS)
+???
 </pre>
 
 =====
