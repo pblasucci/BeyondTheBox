@@ -64,10 +64,10 @@ main =
     -- if order was sent, do actual work
     when (In `elem` order) $ do
       msg <- receiveMulti source
-      let stock   =       unpack (msg !! 0)
+      let stock   =       unpack (msg !! 0)           -- NOTE: not actually used
       let buySell = read (unpack (msg !! 1)) :: Float
       let price   = read (unpack (msg !! 2)) :: Float
-      let value   = buySell * price * 100 -- fixed size, 1 lot
+      let value   = buySell * price * 100             -- NOTE: fixed size, 1 lot
       -- simulate complex "work"
       pause <- getStdRandom $ randomR (1, 100)
       threadDelay pause
