@@ -142,50 +142,46 @@ tickz.client (VB, WinForms)
 
 <p><em>valuz</em></p>
 <pre>
-source |----------[size of next batch]----------&gt; reduce
+                        worker |------[ready]------&gt; reduce
 source &lt;----------[start of new batch]----------| reduce
 source |---[domain]---&gt; worker
                         worker |---[codomain]---&gt; reduce
                         worker &lt;---[shutdown]---| reduce
 
 valuz.source (Python, Console)
-# sends batch size data to reducer
-  PUSH tcp://localhost:9006
-  &lt;- [ count : i32 ]
 # sends batch data to worker(s) for processing
   PUSH tcp://*:9004
-  &lt;- [ stock  : UTF8([A-Z][A-Z0-9]+)   ]
-     [ action : (BUY = +1 | SELL = -1) ]
-     [ price  : f64                    ]
+  &lt;- [ stock  : UTF8([A-Z][A-Z0-9]+)       ]
+     [ action : UTF8(BUY = +1 | SELL = -1) ]
+     [ price  : UTF8(f64)                  ]
 # receives start signal from reducer
   SUB  tcp://localhost:9006
-  ?&gt; [ UTF8("batch.start") ]
+  ?&gt; [ UTF8('batch.start') ]
 
 valuz.reduce (Python, Console)
-# gets batch size from source
+# waits for worker(s) to signal readiness
 # gets results of individual calculation from worker(s)
   PULL tcp://*:9005
-  -&gt; [ count : i32 ]
-  -&gt; [ value : f64 ]
+  -&gt; []
+  -&gt; [ value : UTF8(f64) ]
 # sends control signal to source
 # sends control signal to worker(s)
   PUB tcp://*:9006
-  &lt;&lt; [ UTF8("batch.start") ]
-  &lt;&lt; [ UTF8("batch.leave") ]
+  &lt;&lt; [ UTF8('batch.start') ]
+  &lt;&lt; [ UTF8('batch.leave') ]
 
 valuz.worker (Haskell, Console)
-# get input data from source
-# performs calculation
+# gets input data from source
   PULL tcp://localhost:9004
-  -&gt; [ stock  : UTF8([A-Z][A-Z0-9]+)   ]
-     [ action : (BUY = +1 | SELL = -1) ]
-     [ price  : f64                    ]
+  -&gt; [ stock  : UTF8([A-Z][A-Z0-9]+)       ]
+     [ action : UTF8(BUY = +1 | SELL = -1) ]
+     [ price  : UTF8(f64)                  ]
 # sends calculated result to reducer
   PUSH tcp://localhost:9005
-  -&gt; [ value : f64 ]
+  &lt;- [ value : UTF8(f64) ]
 # receives control signal from reducer
   SUB  tcp://localhost:9006
-    ?&gt; [ UTF8("batch.leave") ]
+    ?&gt; [ UTF8('batch.leave') ]
 </pre>
 <p><em>dealz</em></p>
 <pre>

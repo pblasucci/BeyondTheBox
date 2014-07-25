@@ -1,6 +1,7 @@
 open System
 open System.Diagnostics
 open System.IO
+open System.Threading
 
 // helper for parsing Ints
 let (|Int|_|) value =
@@ -26,6 +27,8 @@ do (* PROGRAM *)
   // launch up to N workers
   for i in 1 .. workerCount do Process.Start worker |> ignore
 
-  // launch server
-  Process.Start ("python",reduce) |> ignore
+  // launch distributor
   Process.Start ("python",source) |> ignore
+  // launc aggregator
+  let reduce = sprintf "%s %i" reduce workerCount
+  Process.Start ("python",reduce) |> ignore

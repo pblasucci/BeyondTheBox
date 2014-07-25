@@ -2,16 +2,18 @@ import random
 import time
 import zmq
 
-## sends batch data to worker(s) for processing
-#  PUSH tcp://*:9004
-#  <- [ stock  : UTF8([A-Z][A-Z0-9]+)          ]
-#     [ action : (BUY = 1 | SELL = -1) => UTF8 ]
-#     [ price  : f64 => UTF8                   ]
-## sends "start of batch" signal to reducer
-#  PUSH tcp://localhost:9006
-#  <- [ command : START = 0uy ]
+# ======================================================================
+# # sends batch data to worker(s) for processing
+#   PUSH tcp://*:9004
+#   <- [ stock  : UTF8([A-Z][A-Z0-9]+)       ]
+#      [ action : UTF8(BUY = +1 | SELL = -1) ]
+#      [ price  : UTF8(f64)                  ]
+# # receives start signal from reducer
+#   SUB  tcp://localhost:9006
+#   ?> [ UTF8('batch.start') ]
+# ======================================================================
 
-# setup a simple portfolio
+## setup a simple portfolio
 stocks = [ (b"MSFT",  41.78)
          , (b"AAPL",  95.35)
          , (b"GOOG", 571.09)
@@ -35,22 +37,24 @@ def order ():
 
 context = zmq.Context()
 # socket by which orders are sent to worker(s)
-source = context.socket(zmq.PUSH)
-source.bind("tcp://*:9004")
-# direct connection to aggregator
-reduce = context.socket(zmq.PUSH)
-reduce.connect("tcp://localhost:9005")
+distrib = context.socket(zmq.PUSH)
+distrib.bind("tcp://*:9004")
+# socket by control signals are received from the aggregator
+collect = context.socket(zmq.SUB)
+collect.connect("tcp://localhost:9006")
 
-# wait for worker coordination
-_ = input("Press Enter when the workers are ready ")
-print("Sending tasks to worker...")
-
-# signal aggregator that batch has started
-reduce.send(b'0')
+# wait for worker coordination (ie: start signal from aggregator)
+collect.set(zmq.SUBSCRIBE, b'')
+_ = collect.recv()
+print("Distributing orders for valuation...")
 
 # send out a batch of orders for pricing
 for _ in range(100):
-  source.send_multipart(order())
+  distrib.send_multipart(order())
 
 # give ZMQ a chance to deliver
 time.sleep(1)
+print("100 orders sent.")
+
+# give user a chance to review the resutls
+_ = input("Press <RETURN> to exit")
