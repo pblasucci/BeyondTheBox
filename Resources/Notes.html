@@ -998,82 +998,53 @@ tickz.client (VB, WinForms)
 <p><em>valuz</em></p>
 
 <pre>
-source |----------[size of next batch]----------&gt; reduce
+                        worker |----[idling]----&gt; reduce
 source &lt;----------[start of new batch]----------| reduce
 source |---[domain]---&gt; worker
                         worker |---[codomain]---&gt; reduce
                         worker &lt;---[shutdown]---| reduce
 
 valuz.source (Python, Console)
-# sends batch size data to reducer
-  PUSH tcp://localhost:9006
-  &lt;- [ count : i32 ]
 # sends batch data to worker(s) for processing
   PUSH tcp://*:9004
-  &lt;- [ stock  : UTF8([A-Z][A-Z0-9]+)   ]
-     [ action : (BUY = +1 | SELL = -1) ]
-     [ price  : f64                    ]
+  &lt;- [ stock  : UTF8([A-Z][A-Z0-9]+)       ]
+     [ action : UTF8(BUY = +1 | SELL = -1) ]
+     [ price  : UTF8(f64)                  ]
 # receives start signal from reducer
   SUB  tcp://localhost:9006
-  ?&gt; [ UTF8("batch.start") ]
+  ?&gt; [ UTF8('batch.start') ]
 
 valuz.reduce (Python, Console)
-# gets batch size from source
+# waits for worker(s) to signal readiness
 # gets results of individual calculation from worker(s)
   PULL tcp://*:9005
-  -&gt; [ count : i32 ]
-  -&gt; [ value : f64 ]
+  -&gt; []
+  -&gt; [ value : UTF8(f64) ]
 # sends control signal to source
 # sends control signal to worker(s)
   PUB tcp://*:9006
-  &lt;&lt; [ UTF8("batch.start") ]
-  &lt;&lt; [ UTF8("batch.leave") ]
+  &lt;&lt; [ UTF8('batch.start') ]
+  &lt;&lt; [ UTF8('batch.leave') ]
 
 valuz.worker (Haskell, Console)
-# get input data from source
-# performs calculation
+# gets input data from source
   PULL tcp://localhost:9004
-  -&gt; [ stock  : UTF8([A-Z][A-Z0-9]+)   ]
-     [ action : (BUY = +1 | SELL = -1) ]
-     [ price  : f64                    ]
+  -&gt; [ stock  : UTF8([A-Z][A-Z0-9]+)       ]
+     [ action : UTF8(BUY = +1 | SELL = -1) ]
+     [ price  : UTF8(f64)                  ]
 # sends calculated result to reducer
   PUSH tcp://localhost:9005
-  -&gt; [ value : f64 ]
+  &lt;- [ value : UTF8(f64) ]
 # receives control signal from reducer
   SUB  tcp://localhost:9006
-    ?&gt; [ UTF8("batch.leave") ]
+    ?&gt; [ UTF8('batch.leave') ]
 </pre>
 
 <p><em>dealz</em></p>
 
 <pre>
-dealz (F#, ?FunScript, ?WebAPI, ?ServiceStack)
-  # chatz, on bg thread
-  REQ tcp://localhost:9001
-  SUB tcp://localhost:9002
-  ?&gt; [ "" ]
-  # tickz, on bg thread
-  SUB tcp://localhost:9003
-  ?&gt; [ "(?sym:[A-Z][A-Z0-9]+)" ]*
-  # valuz, on bg thread
-  PUSH tcp://*:9004
-  &lt;- [ "(?stock:[A-Z][A-Z0-9]+)"        ]
-     [ action :(BUY = 0uy | SELL = 1uy) ]
-     [ shares :i32                      ]
-     [ price  :f64                      ]
-  PULL tcp://*:9005
-  -&gt; [ command :(READY = 2uy) ]
-  -&gt; [ "(?stock:[A-Z][A-Z0-9]+)" ]
-     [ value :f64                ]
-  PUB  tcp://*:9006
-  &lt;&lt; [ comand :EXIT = 0uy ] # to worker, after completion
-  # monitor, on bg thread
-  PAIR inproc://monitor.chatz.req
-  PAIR inproc://monitor.chatz.sub
-  PAIR inproc://monitor.tickz.sub
-  PAIR inproc://monitor.valuz.push
-  PAIR inproc://monitor.valuz.pull
-  PAIR inproc://monitor.valuz.pub
+dealz (F# + Signal, Console w/ HTML + JS + CSS)
+???
 </pre>
 
 <h1></h1>

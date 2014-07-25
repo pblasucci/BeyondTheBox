@@ -142,7 +142,7 @@ tickz.client (VB, WinForms)
 
 <p><em>valuz</em></p>
 <pre>
-                        worker |------[ready]------&gt; reduce
+                        worker |----[idling]----&gt; reduce
 source &lt;----------[start of new batch]----------| reduce
 source |---[domain]---&gt; worker
                         worker |---[codomain]---&gt; reduce
