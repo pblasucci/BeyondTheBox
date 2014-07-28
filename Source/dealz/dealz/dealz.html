@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>dealz</title>
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.1.0.min.js"></script>
+</head>
+<body>
+  <script>
+    $(function(){
+      "use strict";
+
+      var c = $.connection('signalr');
+      
+      c.received(function(msg){ console.log(msg); })
+       .start()
+       .done(function(){  
+          window.setInterval(function(c){ c.send("test"); },1000,c);
+       });
+    });
+  </script>
+</body>
+</html>

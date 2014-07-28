@@ -8,7 +8,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{B9CD
 		dealz.fsx = dealz.fsx
 	EndProjectSection
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "dealz", "dealz\dealz.fsproj", "{B829D3F5-A312-4764-957A-0690F9D41948}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B829D3F5-A312-4764-957A-0690F9D41948}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B829D3F5-A312-4764-957A-0690F9D41948}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B829D3F5-A312-4764-957A-0690F9D41948}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B829D3F5-A312-4764-957A-0690F9D41948}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection

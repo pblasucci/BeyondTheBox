@@ -185,7 +185,7 @@ valuz.worker (Haskell, Console)
 </pre>
 <p><em>dealz</em></p>
 <pre>
-dealz (F# + Signal, Console w/ HTML + JS + CSS)
+dealz (F# + SignalR, Console w/ HTML + JS + CSS)
 ???
 </pre>
 
