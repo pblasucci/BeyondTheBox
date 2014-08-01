@@ -6,16 +6,22 @@
   <script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.1.0.min.js"></script>
 </head>
 <body>
+  <button id="follow">Follow MSFT</button>
+  <button id="forget">Forget MSFT</button>
   <script>
     $(function(){
       "use strict";
-
+      
+      var FOLLOWMSFT = '{"Case":"Follow","Fields":["MSFT"]}';
+      var FORGETMSFT = '{"Case":"Forget","Fields":["MSFT"]}';
+      
       var c = $.connection('signalr');
       
       c.received(function(msg){ console.log(msg); })
        .start()
        .done(function(){  
-          window.setInterval(function(c){ c.send("test"); },1000,c);
+          $("#follow").click(function(){ c.send(FOLLOWMSFT); });
+          $("#forget").click(function(){ c.send(FORGETMSFT); });
        });
     });
   </script>

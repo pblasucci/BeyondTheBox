@@ -8,6 +8,7 @@ do (* PROGRAM *)
                             ,"tickz.server/Debug/tickz.server.exe")
   let client = Path.Combine (__SOURCE_DIRECTORY__
                             ,"tickz.client/bin/Debug/tickz.client.exe")
+
   // launch server
   Process.Start server |> ignore
   // launch three clients, each with a different stock
