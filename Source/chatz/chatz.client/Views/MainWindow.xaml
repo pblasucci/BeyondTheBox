@@ -30,7 +30,7 @@
                 Text="{Binding Handle, StringFormat='Welcome to the discussion, {0}.'}"
                 />
     <!-- Row 1 -->
-    <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+    <a:ScrollBottomListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
              SelectionMode="Single"
              Margin="6 3 6 3"
              HorizontalContentAlignment="Stretch"
@@ -75,7 +75,7 @@
           </Grid>
         </DataTemplate>
       </ListBox.ItemTemplate>
-    </ListBox>
+    </a:ScrollBottomListBox>
     <!-- Row 2 -->
     <TextBox  Name="Input"
               Grid.Row="2" Grid.Column="0"

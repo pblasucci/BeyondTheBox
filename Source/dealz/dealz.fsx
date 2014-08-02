@@ -26,5 +26,5 @@ do (* PROGRAM *)
   if debug then Environment.SetEnvironmentVariable("RUST_LOG","chatz.server=4")
   Process.Start chatz |> ignore
   // launch dealz
-  Process.Start dealz |> ignore
+  Process.Start (dealz,"pblasucci") |> ignore
   Process.Start "http://localhost:9000/dealz.html" |> ignore
