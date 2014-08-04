@@ -8,17 +8,17 @@ type Client (proxy :IServiceProxy) =
 
   override self.OnReceived (_,connectionID,message) = 
     let response =  match tryJSON message with
-                    | Success (Follow stock) -> proxy.Follow stock
-                                                Acknowledged
-                    | Success (Forget stock) -> proxy.Forget stock
-                                                Acknowledged
-                    | Success (Jabber words) -> proxy.Jabber words
-                                                Acknowledged
-                    | Success (Reckon trade) -> proxy.Reckon trade
-                                                Acknowledged
-                    | Failure (errorMessage) -> Debug.WriteLine errorMessage
-                                                Failed errorMessage
-    
+                    | Success (Follow symbol) ->  proxy.Follow symbol
+                                                  Acknowledged
+                    | Success (Forget symbol) ->  proxy.Forget symbol
+                                                  Acknowledged
+                    | Success (Jabber report) ->  proxy.Jabber report
+                                                  Acknowledged
+                    | Success (Reckon trades) ->  proxy.Reckon trades
+                                                  Acknowledged
+                    | Failure (failureReport) ->  Debug.WriteLine failureReport
+                                                  Failed failureReport
+      
     self.Connection.Send (connectionID,response)
 
 

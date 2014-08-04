@@ -56,10 +56,10 @@ type Calc =
   { Value :float }
 
 type ClientMsg =
-  | Follow of stock:string
-  | Forget of stock:string
-  | Jabber of words:string
-  | Reckon of trade:Order[]
+  | Follow of symbol:string
+  | Forget of symbol:string
+  | Jabber of report:string
+  | Reckon of trades:Order[]
 
 type ServerMsg =
   | Acknowledged
@@ -111,6 +111,9 @@ module Library =
       (offset :^a when ^a : (static member op_Explicit : ^a -> float))
       |> float
       |> date.UnixEpoch.AddSeconds 
+      
+  type Microsoft.FSharp.Control.MailboxProcessor<'T> with
+    member self.TryReceive (timeout :int<'u>) = self.TryReceive (int timeout)
 
   let (|Str|_|) raw =
     try
