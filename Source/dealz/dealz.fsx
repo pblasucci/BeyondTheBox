@@ -14,6 +14,9 @@ do (* PROGRAM *)
   // path to dealz client
   let dealz = Path.Combine (__SOURCE_DIRECTORY__
                            ,"dealz/bin/Debug/dealz.exe")
+  // path to valuz worker
+  let valuz = Path.Combine (__SOURCE_DIRECTORY__
+                           ,"../valuz/valuz.worker/valuz.worker.exe")
 
   // program configuration
   let debug   = match fsi.CommandLineArgs with
@@ -25,6 +28,8 @@ do (* PROGRAM *)
   // launch chatz
   if debug then Environment.SetEnvironmentVariable("RUST_LOG","chatz.server=4")
   Process.Start chatz |> ignore
-  // launch dealz
-  Process.Start (dealz,"pblasucci") |> ignore
+  // launch dealz host
+  let hostArgs = sprintf "pblasucci %s %i" valuz 3
+  Process.Start (dealz,hostArgs) |> ignore
+  // launch dealz gui
   Process.Start "http://localhost:9000/dealz.html" |> ignore

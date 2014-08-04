@@ -48,7 +48,12 @@ module Program =
 
   [<EntryPoint>]
   let Main args =
-    let svc = Services.start (args.[0]) //TODO: handle this better
+    let handle,workerPath,workerCount = 
+      match args with
+      | [| handle; path; count |] -> handle,path,int count
+      | _                         -> invalidOp "dealz not properly configured"
+
+    let svc = Services.start handle workerPath workerCount
     let app = Owin.start "http://localhost:9000" (configure svc)
   
     printfn "Press <RETURN> to exit"; iscanfn ()

@@ -93,7 +93,7 @@ type ValuzMsg =
   | Reckon of trades:Order[]
   | Cancel of signal:fetch<unit>
 
-let valuz context workerCount = agent<ValuzMsg>.Start (fun inbox -> 
+let valuz context workerPath workerCount = agent<ValuzMsg>.Start (fun inbox -> 
   
   let valuz_push = Context.push context
   let valuz_pull = Context.pull context
@@ -123,10 +123,7 @@ let valuz context workerCount = agent<ValuzMsg>.Start (fun inbox ->
         encode (string price)  |]
    
   let launchWorker () =
-    let WORKER = @"C:\Develop\BeyondTheBox\Source\valuz\valuz.worker\valuz.worker.exe"
-    //TODO: pass this path in somehow
-    ProcessStartInfo(WORKER,WindowStyle=ProcessWindowStyle.Hidden)
-    //TODO: make window state configurable
+    ProcessStartInfo(workerPath,WindowStyle=ProcessWindowStyle.Hidden)
     |> Process.Start
     |> ignore
 
@@ -157,12 +154,12 @@ let valuz context workerCount = agent<ValuzMsg>.Start (fun inbox ->
   idle ())
 
 
-let start handle =
+let start handle workerPath workerCount =
   let context = new Context ()
 
   let chatz = chatz context handle
   let tickz = tickz context
-  let valuz = valuz context 3 //TODO: get this from someplace
+  let valuz = valuz context workerPath workerCount
   
   { new IServiceProxy with
       member __.Jabber report = chatz.Post (Jabber report)
