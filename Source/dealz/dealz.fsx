@@ -13,7 +13,7 @@ do (* PROGRAM *)
                            ,"../chatz/chatz.server/chatz.server.exe")
   // path to dealz client
   let dealz = Path.Combine (__SOURCE_DIRECTORY__
-                           ,"dealz/bin/Debug/dealz.exe")
+                           ,"../dealz/dealz.host/bin/Debug/dealz.host.exe")
   // path to valuz worker
   let valuz = Path.Combine (__SOURCE_DIRECTORY__
                            ,"../valuz/valuz.worker/valuz.worker.exe")

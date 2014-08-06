@@ -8,7 +8,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{B9CD
 		dealz.fsx = dealz.fsx
 	EndProjectSection
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "dealz", "dealz\dealz.fsproj", "{B829D3F5-A312-4764-957A-0690F9D41948}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{23A5A5FE-1F72-4BAD-8786-B616569A3D84}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "dealz.host", "dealz.host\dealz.host.fsproj", "{B829D3F5-A312-4764-957A-0690F9D41948}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

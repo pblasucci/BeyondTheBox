@@ -1,0 +1,29 @@
+﻿@import 'grid.less';
+
+/*@columns: 12;*/
+/*@column-width: 60;*/
+@gutter-width: 5;
+/*@total-width: 100%;*/
+
+#chatz, #tickz, #valuz {
+  background-color: tan;
+  padding: 4px;
+  border: 1px solid blue;
+  margin: 40px;
+}
+
+#chatz {
+  .column(6);
+  margin: 10px;
+}
+
+#analysis {
+  .column(6);
+  .row(6);
+  margin: 10px;
+}
+
+#tickz, #valuz {
+  .column(6,6);
+  margin: 0 10px 10px 0;
+}
