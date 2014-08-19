@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import random
 import time
 import zmq
@@ -55,6 +56,3 @@ for _ in range(100):
 # give ZMQ a chance to deliver
 time.sleep(1)
 print("100 orders sent.")
-
-# give user a chance to review the resutls
-_ = input("Press <RETURN> to exit")

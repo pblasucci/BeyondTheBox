@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import struct
 import sys
 import time
@@ -65,6 +66,3 @@ print("Calculated result: {:+.3f}".format(value))
 
 # tell workers to shutdown
 control.send(b'batch.leave')
-
-# give user a chance to review the resutls
-_ = input("Press <RETURN> to exit")

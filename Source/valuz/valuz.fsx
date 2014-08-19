@@ -9,11 +9,10 @@ let (|Int|_|) value =
   | true ,i -> Some i
   | false,_ -> None
 
-
 do (* PROGRAM *)
   // path to worker executable
   let worker = Path.Combine (__SOURCE_DIRECTORY__
-                             ,"valuz.worker/valuz.worker.exe")
+                             ,"valuz.worker/valuz.worker")
   // path to server code
   let serverDir  = Path.Combine (__SOURCE_DIRECTORY__,"valuz.server")
   let source     = Path.Combine (serverDir,"valuz.source.py")
@@ -25,10 +24,11 @@ do (* PROGRAM *)
                     | _                -> 1
 
   // launch up to N workers
-  for i in 1 .. workerCount do Process.Start worker |> ignore
+  for i in 1 .. workerCount do 
+    Process.Start (sprintf "%s" worker) |> ignore
 
   // launch distributor
-  Process.Start ("python",source) |> ignore
-  // launc aggregator
+  Process.Start ("/usr/local/bin/python3",source) |> ignore
+  // launch aggregator
   let reduce = sprintf "%s %i" reduce workerCount
-  Process.Start ("python",reduce) |> ignore
+  Process.Start ("/usr/local/bin/python3",reduce) |> ignore

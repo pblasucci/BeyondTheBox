@@ -191,10 +191,52 @@ dealz (F# + SignalR, Console w/ HTML + JS + CSS)
 
 =====
 
+#### Slide Deck
+
+1.  Title + Presenter Info w/ logos
+    1.  Some background on presenter
+2.  "No Message Queue" animated graphic
+    1.  ZeroMQ disclaimer
+    2.  High-level summary
+    3.  Notes about community
+3.  ?composition graphic?
+    1.  Basic concepts
+4.  tickz topology
+    1.  run demo
+    2.  review code
+5.  ?communication graphic?
+    1.  Detailed concepts
+6.  chatz topology
+    1.  run demo
+    2.  review code
+7.  ?coordination graphic?
+    1.  More important concepts
+8.  valuz topology
+    1.  run demo
+    2.  review code
+9.  ?complexity graphic?
+    1.  Putting it all together
+10. dealz topology
+    1.  run demo
+    2.  review code
+11. ?continuation graphic?
+    1.  Things not covered
+12. Title + Presenter Info
+
+=====
+
 #### Document
 
-__TODO: ???__
+* Brochure
+  * Cover (1 panel)
+  * ZeroMQ "cheat sheet" (3 panels)
+  * Important links about ZeroMQ (1 panel)
+  * Brief info + links about present w/ photo (1 panel)
 
+
+* Handouts
+  * Topology diagrams from demos
+  * Code fragments from demos
 
 =====
 
