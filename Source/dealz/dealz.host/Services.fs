@@ -17,8 +17,8 @@ let chatz context handle = agent<ChatzMsg>.Start (fun inbox ->
   let chatz_req = Context.req context
   let chatz_sub = Context.sub context
   
-  Socket.connect    chatz_req "tcp://localhost:9001"
-  Socket.connect    chatz_sub "tcp://localhost:9002"
+  Socket.connect    chatz_req "tcp://10.22.48.86:9001"
+  Socket.connect    chatz_sub "tcp://10.22.48.86:9002"
   Socket.subscribe  chatz_sub [ ""B ] // all topics
     
   let exchange msg =
@@ -64,7 +64,7 @@ type TickzMsg =
 let tickz context = agent<TickzMsg>.Start (fun inbox -> 
 
   let tickz_sub = Context.sub context
-  Socket.connect tickz_sub "tcp://localhost:9003"
+  Socket.connect tickz_sub "tcp://10.22.48.86:9003"
     
   let rec loop () = async {
     tickz_sub

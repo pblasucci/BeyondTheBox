@@ -48,6 +48,7 @@ module Program =
 
   [<EntryPoint>]
   let Main args =
+
     let handle,workerPath,workerCount = 
       match args with
       | [| handle; path; count |] -> handle,path,int count
@@ -56,7 +57,8 @@ module Program =
     let svc = Services.start handle workerPath workerCount
     let app = Owin.start "http://localhost:9000" (configure svc)
   
-    printfn "Press <RETURN> to exit"; iscanfn ()
+    printf "Press <return> to exit "; iscanfn ()
+
     svc.Dispose()
     app.Dispose()
     OKAY
