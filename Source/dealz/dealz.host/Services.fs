@@ -160,19 +160,18 @@ let start handle workerPath workerCount =
   let chatz = chatz context handle
   let tickz = tickz context
   let valuz = valuz context workerPath workerCount
-  
+
+  let binnable : IDisposable list = [context; chatz; tickz; valuz]
+
   { new IServiceProxy with
-      member __.Jabber report = chatz.Post (Jabber report)
-      member __.Follow symbol = tickz.Post (Follow symbol)
-      member __.Forget symbol = tickz.Post (Ignore symbol)
-      member __.Reckon trades = valuz.Post (Reckon trades)
+      member __.Jabber report = chatz <-- Jabber report
+      member __.Follow symbol = tickz <-- Follow symbol
+      member __.Forget symbol = tickz <-- Ignore symbol
+      member __.Reckon trades = valuz <-- Reckon trades
 
     interface IDisposable with
       member __.Dispose () =
-        chatz.PostAndReply Escape
-        tickz.PostAndReply Cutoff
-        valuz.PostAndReply Cancel
-        dispose chatz
-        dispose tickz
-        dispose valuz
-        dispose context }
+        chatz --> Escape
+        tickz --> Cutoff
+        valuz --> Cancel
+        binnable |> List.iter dispose }

@@ -111,7 +111,11 @@ module Library =
       (offset :^a when ^a : (static member op_Explicit : ^a -> float))
       |> float
       |> date.UnixEpoch.AddSeconds 
-      
+  
+  let inline (-->) (agent :agent<_>) msg = agent.PostAndReply msg
+  let inline (<--) (agent :agent<_>) msg = agent.Post         msg
+    
+
   type Microsoft.FSharp.Control.MailboxProcessor<'T> with
     member self.TryReceive (timeout :int<'u>) = self.TryReceive (int timeout)
 
