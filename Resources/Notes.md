@@ -199,27 +199,27 @@ dealz (F# + SignalR, Console w/ HTML + JS + CSS)
     1.  ZeroMQ disclaimer
     2.  High-level summary
     3.  Notes about community
-3.  ?composition graphic?
+3.  ?composition graphic: various types of legos stuck together?
     1.  Basic concepts
 4.  tickz topology
     1.  run demo
     2.  review code
-5.  ?communication graphic?
+5.  ?communication graphic: telephone?
     1.  Detailed concepts
 6.  chatz topology
     1.  run demo
     2.  review code
-7.  ?coordination graphic?
+7.  ?coordination graphic: juggling,acrobatics?
     1.  More important concepts
 8.  valuz topology
     1.  run demo
     2.  review code
-9.  ?complexity graphic?
+9.  ?complexity graphic: rube goldberg machine?
     1.  Putting it all together
 10. dealz topology
     1.  run demo
     2.  review code
-11. ?continuation graphic?
+11. ?continuation graphic: ?
     1.  Things not covered
 12. Title + Presenter Info
 
