@@ -10,49 +10,5 @@ body:after {
 body:after {
   clear: both;
 }
-/*@columns: 12;*/
-/*@column-width: 60;*/
 /*@total-width: 100%;*/
-#chatz,
-#tickz,
-#valuz {
-  background-color: tan;
-  padding: 4px;
-  border: 1px solid blue;
-  margin: 40px;
-}
-#chatz {
-  display: inline;
-  float: left;
-  width: 385px;
-  margin: 0 2.5px;
-  margin: 10px;
-}
-#analysis {
-  display: inline;
-  float: left;
-  width: 385px;
-  margin: 0 2.5px;
-  display: block;
-  width: 395px;
-  margin: 0 -2.5px;
-  *zoom: 1;
-  margin: 10px;
-}
-#analysis:before,
-#analysis:after {
-  content: "";
-  display: table;
-}
-#analysis:after {
-  clear: both;
-}
-#tickz,
-#valuz {
-  display: inline;
-  float: left;
-  width: 385px;
-  margin: 0 2.5px;
-  margin: 0 10px 10px 0;
-}
 /*# sourceMappingURL=dealz.css.map */
