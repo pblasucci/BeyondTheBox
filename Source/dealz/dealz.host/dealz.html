@@ -11,61 +11,32 @@
   </script>
 </head>
 <body>
-  <section id="tickz">
-    <div id="stocksChart" />
-    <div id="stockValues" />
-    <form id="subscribe">
-      <label>Stock</label>
-      <input type="text" id="stock" />
-      <button>+</button>
-    </form>
+  <div id="analysis">
+    <section id="tickz">
+      <div>
+        <button id="follow">Follow MSFT</button>
+        <button id="forget">Forget MSFT</button>
+      </div>
+      <input type="text" id="tickz_out" />
+    </section>
+    <section id="valuz">
+      <div>
+        <button id="reckon">Price Order</button>
+      </div>
+      <input type="text" id="valuz_out" />
+    </section>
+  </div>
+  <section id="chatz">
+    <textarea id="users"></textarea>
+    <textarea id="chatz_out"></textarea>
+    <div>
+      <textarea id="jabber_words"></textarea>
+    </div>
+    <div>
+      <button id="jabber">Send Message</button>
+    </div>
   </section>
-  <script>
-    $(function () {
-      "use strict";
-      
-      var c = $.connection('signalr');
-      c.received(function (msg) {
-        switch (msg.Case) {
-          case 'Ticked': // of Tick
-            $('#tickz_out').val(msg.Fields[0].Price);
-            break;
-          case 'Memoed': // of Memo
-            //TODO: ???
-            break;
-          case 'Joined': // of users:string[]
-            //TODO: ???
-            break;
-          case 'Solved': // of Calc
-            //TODO: ???
-            break;
-          case 'Disconnect':
-            console.log(msg.Case);
-            c.stop();
-            break
-          default:
-            var note = msg.Case;
-            if (msg.Fields.length > 0) {
-              note += ": " + msg.Fields[0];
-            }
-            console.log(note);
-            break;
-        }
-      })
-      .start()
-      .done(function () {
-        $("#follow").click(function () { c.send(FOLLOWMSFT); });
-        $("#forget").click(function () { c.send(FORGETMSFT); });
-        $("#jabber").click(function () {
-          var inp = $("#jabber_words");
-          var txt = inp.val();
-          var msg = { Case: "Jabber", Fields: [txt] };
-          c.send(window.JSON.stringify(msg));
-          inp.val("");
-        });
-        $("#reckon").click(function () { c.send(SMALLTRADE); });
-      });
-    });
-  </script>
+  <script src="dealz.js"></script>
 </body>
 </html>
+  

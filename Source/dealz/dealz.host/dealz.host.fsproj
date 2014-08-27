@@ -26,7 +26,7 @@
     <Prefer32Bit>true</Prefer32Bit>
     <StartArguments>
     </StartArguments>
-    <Commandlineparameters>pblasucci /Users/pblasucci/Developer/BeyondTheBox/Source/valuz/valuz.worker/valuz.worker 3</Commandlineparameters>
+    <Commandlineparameters>pblasucci 172.16.1.255 /Users/pblasucci/Developer/BeyondTheBox/Source/valuz/valuz.worker/valuz.worker 3</Commandlineparameters>
     <ConsolePause>false</ConsolePause>
     <Externalconsole>true</Externalconsole>
   </PropertyGroup>

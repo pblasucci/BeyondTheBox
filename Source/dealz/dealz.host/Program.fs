@@ -49,12 +49,20 @@ module Program =
   [<EntryPoint>]
   let Main args =
 
-    let handle,workerPath,workerCount = 
+    let handle,chatz_tell,chatz_hear,tickz,workerPath,workerCount = 
       match args with
-      | [| handle; path; count |] -> handle,path,int count
-      | _                         -> invalidOp "dealz not properly configured"
+      | [|  handle; 
+            remote; 
+            path; 
+            count |] ->   handle
+                        , sprintf "tcp://%s:9001" remote
+                        , sprintf "tcp://%s:9002" remote
+                        , sprintf "tcp://%s:9003" remote
+                        , path
+                        , int count
+      | _            -> invalidOp "dealz not properly configured"
 
-    let svc = Services.start handle workerPath workerCount
+    let svc = Services.start handle (chatz_tell,chatz_hear,tickz) workerPath workerCount
     let app = Owin.start "http://*:9000" (configure svc)
   
     printf "Press <return> to exit "; iscanfn ()

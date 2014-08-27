@@ -13,12 +13,12 @@ type ChatzMsg =
   | Jabber of report:string
   | Escape of signal:fetch<unit>
 
-let chatz context handle = agent<ChatzMsg>.Start (fun inbox -> 
+let chatz context handle tell hear = agent<ChatzMsg>.Start (fun inbox -> 
   let chatz_req = Context.req context
   let chatz_sub = Context.sub context
   
-  Socket.connect    chatz_req "tcp://10.22.48.86:9001"
-  Socket.connect    chatz_sub "tcp://10.22.48.86:9002"
+  Socket.connect    chatz_req tell
+  Socket.connect    chatz_sub hear
   Socket.subscribe  chatz_sub [ ""B ] // all topics
     
   let exchange msg =
@@ -61,10 +61,10 @@ type TickzMsg =
   | Ignore of symbol:string
   | Cutoff of signal:fetch<unit>
 
-let tickz context = agent<TickzMsg>.Start (fun inbox -> 
+let tickz context address = agent<TickzMsg>.Start (fun inbox -> 
 
   let tickz_sub = Context.sub context
-  Socket.connect tickz_sub "tcp://10.22.48.86:9003"
+  Socket.connect tickz_sub address
     
   let rec loop () = async {
     tickz_sub
@@ -154,11 +154,11 @@ let valuz context workerPath workerCount = agent<ValuzMsg>.Start (fun inbox ->
   idle ())
 
 
-let start handle workerPath workerCount =
+let start handle (chatzTell,chatzHear,tickzLink) workerPath workerCount =
   let context = new Context ()
 
-  let chatz = chatz context handle
-  let tickz = tickz context
+  let chatz = chatz context handle chatzTell chatzHear
+  let tickz = tickz context tickzLink
   let valuz = valuz context workerPath workerCount
 
   let binnable : IDisposable list = [context; chatz; tickz; valuz]
