@@ -27,8 +27,8 @@
     <StartArguments>
     </StartArguments>
     <Commandlineparameters>pblasucci /Users/pblasucci/Developer/BeyondTheBox/Source/valuz/valuz.worker/valuz.worker 3</Commandlineparameters>
-    <Externalconsole>true</Externalconsole>
     <ConsolePause>false</ConsolePause>
+    <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -61,6 +61,9 @@
     <Compile Include="Library.fs" />
     <Compile Include="Services.fs" />
     <Compile Include="Program.fs" />
+    <None Include="dealz.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="grid.less" />
     <None Include="dealz.less" />
     <None Include="dealz.css">

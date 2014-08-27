@@ -193,35 +193,35 @@ dealz (F# + SignalR, Console w/ HTML + JS + CSS)
 
 #### Slide Deck
 
-1.  Title + Presenter Info w/ logos
+1.  Title + Presenter Info
     1.  Some background on presenter
-2.  "No Message Queue" animated graphic
+2.  Collaboration (graphic: ???)
     1.  ZeroMQ disclaimer
     2.  High-level summary
     3.  Notes about community
-3.  ?composition graphic: various types of legos stuck together?
+3.  Composition (graphic: legos)
     1.  Basic concepts
 4.  tickz topology
     1.  run demo
     2.  review code
-5.  ?communication graphic: telephone?
+5.  Communication (graphic: ???)
     1.  Detailed concepts
 6.  chatz topology
     1.  run demo
     2.  review code
-7.  ?coordination graphic: juggling,acrobatics?
+7.  Coordination (graphic: juggling, acrobatics)
     1.  More important concepts
 8.  valuz topology
     1.  run demo
     2.  review code
-9.  ?complexity graphic: rube goldberg machine?
+9.  Complexity (graphic: rube goldberg machine)
     1.  Putting it all together
 10. dealz topology
     1.  run demo
     2.  review code
-11. ?continuation graphic: ?
+11. Continuation (graphic: ???)
     1.  Things not covered
-12. Title + Presenter Info
+12. Further links (graphic: ???)
 
 =====
 

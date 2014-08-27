@@ -21,6 +21,6 @@ Process.Start tickz |> ignore
 // launch chatz
 Process.Start chatz |> ignore
 // launch dealz host
-Process.Start ("bash",sprintf "-c 'mono %s pblasucci %s %i'" dealz valuz 3) |> ignore
+(* Process.Start ("bash",sprintf "-c 'mono %s pblasucci %s %i'" dealz valuz 3) |> ignore *)
 // launch dealz gui
 Process.Start "http://localhost:9000/dealz.html" |> ignore

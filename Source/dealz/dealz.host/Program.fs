@@ -55,7 +55,7 @@ module Program =
       | _                         -> invalidOp "dealz not properly configured"
 
     let svc = Services.start handle workerPath workerCount
-    let app = Owin.start "http://localhost:9000" (configure svc)
+    let app = Owin.start "http://*:9000" (configure svc)
   
     printf "Press <return> to exit "; iscanfn ()
 
