@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <title>dealz</title>
-  <!--<link rel="stylesheet" type="text/css" href="dealz.css" />-->
+  <link rel="stylesheet" type="text/css" href="dealz.css" />
   <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js">
   </script>
   <script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.1.0.min.js">
@@ -11,15 +11,31 @@
   </script>
 </head>
 <body>
-  <section id="tickz">
-    <div id="stockValues" />
-    <form id="followStock">
-      <label>Stock:</label>
-      <input type="text" id="stockToFollow" />
-      <button>+</button>
-    </form>
+  <div id="analysis">
+    <section id="tickz">
+      <div>
+        <button id="follow">Follow MSFT</button>
+        <button id="forget">Forget MSFT</button>
+      </div>
+      <input type="text" id="tickz_out" />
+    </section>
+    <section id="valuz">
+      <div>
+        <button id="reckon">Price Order</button>
+      </div>
+      <input type="text" id="valuz_out" />
+    </section>
+  </div>
+  <section id="chatz">
+    <textarea id="users"></textarea>
+    <textarea id="chatz_out"></textarea>
+    <div>
+      <textarea id="jabber_words"></textarea>
+    </div>
+    <div>
+      <button id="jabber">Send Message</button>
+    </div>
   </section>
-
   <script src="dealz.js"></script>
 </body>
 </html>
