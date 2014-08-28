@@ -1,19 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{B9CDCEFA-F731-4467-A36F-ED04C7326C3E}"
-	ProjectSection(SolutionItems) = preProject
-		dealz.fsx = dealz.fsx
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{23A5A5FE-1F72-4BAD-8786-B616569A3D84}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
-Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "dealz.host", "dealz.host\dealz.host.fsproj", "{B829D3F5-A312-4764-957A-0690F9D41948}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "dealz.host", "dealz.host\dealz.host.fsproj", "{B829D3F5-A312-4764-957A-0690F9D41948}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,12 +21,10 @@ Global
 		{B829D3F5-A312-4764-957A-0690F9D41948}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B829D3F5-A312-4764-957A-0690F9D41948}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = dealz.host\dealz.host.fsproj
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
