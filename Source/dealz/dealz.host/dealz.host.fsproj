@@ -24,8 +24,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DocumentationFile>bin\Debug\dealz.host.XML</DocumentationFile>
     <Prefer32Bit>true</Prefer32Bit>
-    <StartArguments>
-    </StartArguments>
+    <StartArguments>pblasucci 10.0.0.26 Y:\Developer\BeyondTheBox\Source\valuz\valuz.worker\valuz.worker 3</StartArguments>
     <Commandlineparameters>pblasucci 10.211.55.3 /Users/pblasucci/Developer/BeyondTheBox/Source/valuz/valuz.worker/valuz.worker 3</Commandlineparameters>
     <ConsolePause>false</ConsolePause>
     <Externalconsole>true</Externalconsole>

@@ -2,8 +2,8 @@
   "use strict";
   var orders = new Array();
   for (var i = 0, j = 1, k = 2; k < 500; i += 3, j += 3, k += 3) {
-    orders[i] = { Stock: "MSFT", Action: { Case: "Buy", Fields: [] }, Price: 19.997 };
-    orders[j] = { Stock: "APPL", Action: { Case: "Buy", Fields: [] }, Price: 35.765 };
+    orders[i] = { Stock: "MSFT", Action: { Case: "Buy" , Fields: [] }, Price: 19.997 };
+    orders[j] = { Stock: "APPL", Action: { Case: "Buy" , Fields: [] }, Price: 35.765 };
     orders[k] = { Stock: "GOOG", Action: { Case: "Sell", Fields: [] }, Price: 256.004 };
   }
   var trades = { Case: "Reckon", Fields: [orders] };
@@ -23,7 +23,11 @@
         $('#chatz_out').val(chat + msg.Fields[0].Message);
         break;
       case 'Joined': // of users:string[]
-        $('#users').val(msg.Fields[0]);
+        var users = msg.Fields[0]
+                       .split(",")
+                       .sort()
+                       .join("\r");
+        $('#users').val(users);
         break;
       case 'Solved': // of Calc
         $('#valuz_out').val(msg.Fields[0].Value);
@@ -54,4 +58,5 @@
     });
     $("#reckon").click(function () { c.send(SMALLTRADE); });
   });
+  $("#users").val("[Connected Users]\r----------------------------")
 });

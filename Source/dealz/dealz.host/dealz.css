@@ -13,6 +13,9 @@ body:after {
 /*@columns: 12;*/
 /*@column-width: 60;*/
 /*@total-width: 100%;*/
+h2 {
+  margin: 6px 0;
+}
 #chatz,
 #tickz,
 #valuz {
@@ -26,7 +29,7 @@ body:after {
   float: left;
   width: 385px;
   margin: 0 2.5px;
-  margin: 10px;
+  margin: 10px 10px 10px 40px;
 }
 #analysis {
   display: inline;
@@ -55,4 +58,19 @@ body:after {
   margin: 0 2.5px;
   margin: 0 10px 10px 0;
 }
- 
+#valuz {
+  margin-top: 40px;
+}
+input[type=text] {
+  width: 380px;
+}
+#users,
+#chatz_out {
+  width: 184px;
+  height: 200px;
+}
+#jabber_words {
+  width: 378px;
+  height: 40px;
+}
+/*# sourceMappingURL=dealz.css.map */
