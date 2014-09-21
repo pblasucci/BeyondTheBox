@@ -16,6 +16,12 @@ body:after {
 h2 {
   margin: 6px 0;
 }
+button {
+  width: 90px;
+}
+input[type=text] {
+  width: 190px;
+}
 #chatz,
 #tickz,
 #valuz {
@@ -60,9 +66,6 @@ h2 {
 }
 #valuz {
   margin-top: 40px;
-}
-input[type=text] {
-  width: 380px;
 }
 #users,
 #chatz_out {

@@ -39,7 +39,8 @@
     switch (msg.Case) {
       
       case 'Ticked': // of Tick
-        $('#tickz_out').val(msg.Fields[0].Price);
+        var field = "#tickz_" + msg.Fields[0].Stock;
+        $(field).val(msg.Fields[0].Price.toFixed(5));
         break;
       
       case 'Memoed': // of Memo
@@ -62,7 +63,7 @@
         break;
       
       case 'Solved': // of Calc
-        $('#valuz_out').val(msg.Fields[0].Value);
+        $('#valuz_out').val(msg.Fields[0].Value.toFixed(5));
         break;
       
       case 'Disconnect':
@@ -82,17 +83,21 @@
     console.log("Starting SignalR");
   })
   .done(function () {
-    // wire-up tasks
-    $("#follow").click(function () { 
-      var ticker = followStock("MSFT");
-      c.send(window.JSON.stringify(ticker));
-    });
+    // wire-up tickz tasks
+    for (var stock in [ "AAPL", "GOOG", "MSFT" ]) {
+      var field = "#follow_" + stock;
+      
+      $(field).click(function () { 
+        var ticker = followStock(stock);
+        c.send(window.JSON.stringify(ticker));
+      });
 
-    $("#forget").click(function () { 
-      var ticker = forgetStock("MSFT");
-      c.send(window.JSON.stringify(ticker)); 
-    });
-
+      $(field).click(function () { 
+        var ticker = forgetStock(stock);
+        c.send(window.JSON.stringify(ticker)); 
+      });
+    }
+    // wire-up chatz tasks
     $("#jabber").click(function () {
       var inp = $("#jabber_words");
       var txt = inp.val();
@@ -100,7 +105,7 @@
       c.send(window.JSON.stringify(msg));
       inp.val("");
     });
-
+    // wire-up valuz tasks
     $("#reckon").click(function () { 
       var trade = buildTrade();
       c.send(window.JSON.stringify(trade)); 
