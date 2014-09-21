@@ -18,7 +18,7 @@ do (* PROGRAM *)
   if debug then Environment.SetEnvironmentVariable("RUST_LOG","chatz.server=4")
   Process.Start server |> ignore
   // launch two clients, each with a different handle
-  [ "pblasucci"; "Rachley" ]
+  [ "DigitalBush"; "Rachley"; ]
   |> Seq.map  (fun name -> client,name)
   |> Seq.iter (Process.Start  >> ignore)
   // also launch an empty client (which will prompt for a handle)
