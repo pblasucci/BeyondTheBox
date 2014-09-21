@@ -1,41 +1,75 @@
 ﻿$(function () {
   "use strict";
-  var orders = new Array();
-  for (var i = 0, j = 1, k = 2; k < 500; i += 3, j += 3, k += 3) {
-    orders[i] = { Stock: "MSFT", Action: { Case: "Buy" , Fields: [] }, Price: 19.997 };
-    orders[j] = { Stock: "APPL", Action: { Case: "Buy" , Fields: [] }, Price: 35.765 };
-    orders[k] = { Stock: "GOOG", Action: { Case: "Sell", Fields: [] }, Price: 256.004 };
-  }
-  var trades = { Case: "Reckon", Fields: [orders] };
-  var SMALLTRADE = window.JSON.stringify(trades);
-  var FOLLOWMSFT = window.JSON.stringify({ Case: "Follow", Fields: ["MSFT"] });
-  var FORGETMSFT = window.JSON.stringify({ Case: "Forget", Fields: ["MSFT"] });
 
+  var USERSLABEL = "[Connected Users]\r----------------------------\r";
+
+  function getChoice(min, max) { return Math.floor(Math.random() * (max - min)) + min }
+  function getRandom(min, max) { return Math.random() * (max - min) + min; }
+
+  // constructs message to start following a stock
+  function followStock(stock) {
+    return { Case: "Follow", Fields: [ stock ] }
+  }
+  // constructs message to stop following a stock
+  function forgetStock(stock) {
+    return { Case: "Forget", Fields: [ stock ] }
+  }
+  // builds a randomly valued order for the given stock
+  function buildOrder(stock,price) {
+    var action = (getChoice(0, 1) === 0) ?  "Sell" : "Buy";
+    return { Stock  : stock
+           , Action : { Case: action, Fields: [] }
+           , Price  : price + getRandom(0, 100) };
+  }
+  // builds a trade consisting of 500 randomly-valued orders
+  function buildTrade() {
+    var orders = [];
+    for (var i = 0, j = 1, k = 2; k < 500; i += 3, j += 3, k += 3) {
+      orders[i] = buildOrder("MSFT",  19.997);
+      orders[j] = buildOrder("APPL",  35.765);
+      orders[k] = buildOrder("GOOG", 256.004);
+    }
+
+    return { Case: "Reckon", Fields: [ orders ] }; 
+  }
+
+  // handle messages from server
   var c = $.connection('signalr');
   c.received(function (msg) {
     switch (msg.Case) {
+      
       case 'Ticked': // of Tick
         $('#tickz_out').val(msg.Fields[0].Price);
         break;
+      
       case 'Memoed': // of Memo
+        var note = msg.Fields[0].Sender 
+                 + ": " 
+                 + msg.Fields[0].Message; 
+        
         var chat = $('#chatz_out').val(); 
         if (chat.length > 0) { chat += "\r"; }
-        $('#chatz_out').val(chat + msg.Fields[0].Message);
+
+        $('#chatz_out').val(chat + note);
         break;
+      
       case 'Joined': // of users:string[]
         var users = msg.Fields[0]
-                       .split(",")
                        .sort()
                        .join("\r");
-        $('#users').val(users);
+      
+        $('#users').val(USERSLABEL + users);
         break;
+      
       case 'Solved': // of Calc
         $('#valuz_out').val(msg.Fields[0].Value);
         break;
+      
       case 'Disconnect':
         console.log(msg.Case);
         c.stop();
         break
+      
       default:
         var note = msg.Case;
         if (msg.Fields.length > 0) { note += (": " + msg.Fields[0]); }
@@ -43,12 +77,22 @@
         break;
     }
   })
+  // connect to server
   .start({ transport: 'longPolling' }, function () {
     console.log("Starting SignalR");
   })
   .done(function () {
-    $("#follow").click(function () { c.send(FOLLOWMSFT); });
-    $("#forget").click(function () { c.send(FORGETMSFT); });
+    // wire-up tasks
+    $("#follow").click(function () { 
+      var ticker = followStock("MSFT");
+      c.send(window.JSON.stringify(ticker));
+    });
+
+    $("#forget").click(function () { 
+      var ticker = forgetStock("MSFT");
+      c.send(window.JSON.stringify(ticker)); 
+    });
+
     $("#jabber").click(function () {
       var inp = $("#jabber_words");
       var txt = inp.val();
@@ -56,7 +100,12 @@
       c.send(window.JSON.stringify(msg));
       inp.val("");
     });
-    $("#reckon").click(function () { c.send(SMALLTRADE); });
+
+    $("#reckon").click(function () { 
+      var trade = buildTrade();
+      c.send(window.JSON.stringify(trade)); 
+    });
   });
-  $("#users").val("[Connected Users]\r----------------------------")
+  // initialize UI
+  $("#users").val(USERSLABEL);
 });
