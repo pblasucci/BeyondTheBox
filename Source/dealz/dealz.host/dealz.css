@@ -17,10 +17,10 @@ h2 {
   margin: 6px 0;
 }
 button {
-  width: 90px;
+  width: 96px;
 }
 input[type=text] {
-  width: 190px;
+  width: 176px;
 }
 #chatz,
 #tickz,
@@ -66,6 +66,9 @@ input[type=text] {
 }
 #valuz {
   margin-top: 40px;
+}
+#valuz em {
+  font-size: small;
 }
 #users,
 #chatz_out {

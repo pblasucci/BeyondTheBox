@@ -3,16 +3,16 @@
 
   var USERSLABEL = "[Connected Users]\r----------------------------\r";
 
-  function getChoice(min, max) { return Math.floor(Math.random() * (max - min)) + min }
+  function getChoice(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
   function getRandom(min, max) { return Math.random() * (max - min) + min; }
 
   // constructs message to start following a stock
   function followStock(stock) {
-    return { Case: "Follow", Fields: [ stock ] }
+    return { Case: "Follow", Fields: [ stock ] };
   }
   // constructs message to stop following a stock
   function forgetStock(stock) {
-    return { Case: "Forget", Fields: [ stock ] }
+    return { Case: "Forget", Fields: [ stock ] };
   }
   // builds a randomly valued order for the given stock
   function buildOrder(stock,price) {
@@ -69,11 +69,11 @@
       case 'Disconnect':
         console.log(msg.Case);
         c.stop();
-        break
+        break;
       
       default:
-        var note = msg.Case;
-        if (msg.Fields.length > 0) { note += (": " + msg.Fields[0]); }
+        var info = msg.Case;
+        if (msg.Fields.length > 0) { info += (": " + msg.Fields[0]); }
         console.log(note);
         break;
     }
