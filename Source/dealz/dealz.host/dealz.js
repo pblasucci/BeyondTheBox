@@ -16,7 +16,7 @@
   }
   // builds a randomly valued order for the given stock
   function buildOrder(stock,price) {
-    var action = (getChoice(0, 1) === 0) ?  "Sell" : "Buy";
+    var action = (getChoice(0, 2) === 0) ?  "Sell" : "Buy";
     return { Stock  : stock
            , Action : { Case: action, Fields: [] }
            , Price  : price + getRandom(0, 100) };
