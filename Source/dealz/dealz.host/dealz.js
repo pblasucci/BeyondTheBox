@@ -84,19 +84,15 @@
   })
   .done(function () {
     // wire-up tickz tasks
-    for (var stock in [ "AAPL", "GOOG", "MSFT" ]) {
-      var field = "#follow_" + stock;
-      
-      $(field).click(function () { 
-        var ticker = followStock(stock);
-        c.send(window.JSON.stringify(ticker));
-      });
+    $("#follow_AAPL").click(function () { c.send(window.JSON.stringify(followStock("AAPL"))); });   
+    $("#forget_AAPL").click(function () { c.send(window.JSON.stringify(forgetStock("AAPL"))); });   
 
-      $(field).click(function () { 
-        var ticker = forgetStock(stock);
-        c.send(window.JSON.stringify(ticker)); 
-      });
-    }
+    $("#follow_GOOG").click(function () { c.send(window.JSON.stringify(followStock("GOOG"))); });   
+    $("#forget_GOOG").click(function () { c.send(window.JSON.stringify(forgetStock("GOOG"))); });   
+
+    $("#follow_MSFT").click(function () { c.send(window.JSON.stringify(followStock("MSFT"))); });   
+    $("#forget_MSFT").click(function () { c.send(window.JSON.stringify(forgetStock("MSFT"))); });   
+
     // wire-up chatz tasks
     $("#jabber").click(function () {
       var inp = $("#jabber_words");
@@ -105,12 +101,14 @@
       c.send(window.JSON.stringify(msg));
       inp.val("");
     });
+
     // wire-up valuz tasks
     $("#reckon").click(function () { 
       var trade = buildTrade();
       c.send(window.JSON.stringify(trade)); 
     });
   });
+
   // initialize UI
   $("#users").val(USERSLABEL);
 });
