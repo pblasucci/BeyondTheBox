@@ -51,11 +51,11 @@ fn extend_client(clients : &mut HashMap<String, f64>, client : String) {
 
 // helper to convert list of connected clients into list of data for reply
 fn build_reply<'a>(clients : &'a HashMap<String, f64>) -> Vec<(&'a String, int)> {
-  let final  = clients.len() - 1;
+  let bounds = clients.len() - 1;
   // pair client name with correct ZMQ flag (required for mutlipart messages)
   clients.keys      ()
          .enumerate ()
-         .map       (|(i,key)| (key, if i == final { 0 } else { zmq::SNDMORE }))
+         .map       (|(i,key)| (key, if i == bounds { 0 } else { zmq::SNDMORE }))
          .collect   ()
 }
 
@@ -104,7 +104,7 @@ fn main() {
       // ... update client expiry
       // ... broadcast message to group
       Ok((client, Some(_))) => {
-         extend_client(&mut clients, client);
+        extend_client(&mut clients, client);
         //NOTE: per protocol, just publish message as originally received
         //NOTE: more robust implementation would broadcast more complex message
         dialog.send_str(message.as_slice(), 0).unwrap();

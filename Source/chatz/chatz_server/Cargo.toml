@@ -1,0 +1,13 @@
+[package]
+
+name = "chatz_server"
+version = "0.0.1"
+authors = ["Paulmichael Blasucci <pblasucci@gmail.com>"]
+
+[dependencies.zmq]
+
+git = "https://github.com/erickt/rust-zmq.git"
+
+[[bin]]
+
+name = "chatz_server"
