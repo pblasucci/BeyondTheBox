@@ -5,7 +5,7 @@ open System.IO
 do (* PROGRAM *)
   // path to server executable
   let server  = Path.Combine (__SOURCE_DIRECTORY__
-                             ,"chatz.server/chatz.server.exe")
+                             ,"chatz_server/target/Debug/chatz_server.exe")
   // path to client executable
   let client  = Path.Combine (__SOURCE_DIRECTORY__
                              ,"chatz.client/bin/Debug/chatz.client.exe")
@@ -15,7 +15,7 @@ do (* PROGRAM *)
                 | _                 -> false
 
   // launch server
-  if debug then Environment.SetEnvironmentVariable("RUST_LOG","chatz.server=4")
+  if debug then Environment.SetEnvironmentVariable("RUST_LOG","debug")
   Process.Start server |> ignore
   // launch two clients, each with a different handle
   [ "DigitalBush"; "Rachley"; ]
