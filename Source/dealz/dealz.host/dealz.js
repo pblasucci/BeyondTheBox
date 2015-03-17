@@ -40,7 +40,7 @@
       
       case 'Ticked': // of Tick
         var field = "#tickz_" + msg.Fields[0].Stock;
-        $(field).val(msg.Fields[0].Price.toFixed(5));
+        $(field).val(msg.Fields[0].Price.toFixed(3));
         break;
       
       case 'Memoed': // of Memo
@@ -73,8 +73,8 @@
       
       default:
         var info = msg.Case;
-        if (msg.Fields.length > 0) { info += (": " + msg.Fields[0]); }
-        console.log(note);
+        if (msg["Fields"] && msg.Fields.length > 0) { info += (": " + msg.Fields[0]); }
+        console.log(info);
         break;
     }
   })
