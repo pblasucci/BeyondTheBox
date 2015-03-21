@@ -1,7 +1,7 @@
 Beyond the Box: Distributed Computing with ZeroMQ
 ===
 
-This is the full set of materials from my presentation at devLink 2014.
+This is the full set of materials from my presentation at Philly Code Camp 2015.
 
 Please take note of the following:
 
@@ -14,7 +14,7 @@ Please take note of the following:
 - The web-based GUI in `Source\dealz` is woefully underdeveloped (because JavaScript is frustrating)
 - All ports are hard-coded (which is really really bad practice)
 
-All source code and associated materials (including the Keynote presentation) are offer AS-IS _with no claims of suitability or guarantees of performance or support of any kind._
+All source code and associated materials (including the PowerPoint presentation) are offered AS-IS _with no claims of suitability or guarantees of performance or support of any kind._
 ===
 
 That having been said, please feel free to direct question and comments to the issue tracker. Also, if you fork this, I'd enjoy looking over any pull requests you submit.
