@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{77D9121C-1435-4492-B536-ABA59F94E178}"
 	ProjectSection(SolutionItems) = preProject
 		chatz.fsx = chatz.fsx
-		chatz.server\chatz.server.rs = chatz.server\chatz.server.rs
+		chatz_server\src\main.rs = chatz_server\src\main.rs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chatz.client", "chatz.client\chatz.client.csproj", "{D63023BD-71AB-4E72-8525-7DB2B0CFBF90}"
